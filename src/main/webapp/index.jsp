@@ -15,7 +15,7 @@
             <p>歡迎，${sessionScope.username}！</p>
             <ul>
                 <li><a href="cart.jsp">購物車</a></li>
-                <li><a href="orders.jsp">訂單查詢</a></li>
+                <li><a href="OrderController">訂單查詢</a></li>
                 <li><a href="LogoutController">登出</a></li>
             </ul>
         </c:when>

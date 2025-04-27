@@ -45,4 +45,19 @@ public class UserDAO {
         }
         return false;
     }
+    
+    public int findUserIdByUsername(String username) {
+        String sql = "SELECT id FROM users WHERE username=?";
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, username);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("id");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1; // 找不到回傳-1
+    }
 }
