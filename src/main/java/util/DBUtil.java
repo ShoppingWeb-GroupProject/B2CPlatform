@@ -17,18 +17,26 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class DBUtil {
 	
-	private static final String DB_PATH = "C:/Users/codyc/eclipse-workspace/B2CPlatform/shop.db";
-    private static final String URL = "jdbc:sqlite:" + DB_PATH;
+	//private static final String DB_PATH = "C:/Users/codyc/eclipse-workspace/B2CPlatform/shop.db";
 
-    public static Connection getConnection() {
+	public static Connection getConnection() {
         Connection conn = null;
         try {
-        	String absolutePath = new java.io.File("shop.db").getAbsolutePath();
-        	System.out.println("📌 SQLite 實際使用的檔案路徑：" + absolutePath);
-
+        	String sep = File.separator;
+        	//String theFilePath = System.getProperty("user.dir") + sep + "shop.db";
+        	
+        	File projectLocal = new File(DBUtil.class.getResource("").getPath().replaceAll("%20", " "));
+        	projectLocal = projectLocal.getParentFile().getParentFile().getParentFile();
+        	String dbPath = projectLocal.getAbsolutePath() + sep + "src" + sep + "database" + sep + "shop.db";
+        	
+        	String URL = "jdbc:sqlite:" + dbPath;
+        	System.out.println("📌 SQLite 實際使用的檔案路徑：" + dbPath);
             // ✅ 強制載入 SQLite JDBC 驅動
             Class.forName("org.sqlite.JDBC");
 

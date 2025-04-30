@@ -2,10 +2,23 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>${product.id != null ? '修改商品' : '新增商品'}</title>
 </head>
 <body>
+
+<c:if test="${empty sessionScope.username or empty sessionScope.role}">
+    <c:redirect url="login.jsp"/>
+</c:if>
+
+<p>使用者：${sessionScope.username}（
+    <c:choose>
+        <c:when test="${sessionScope.role == 'buyer'}">買家</c:when>
+        <c:when test="${sessionScope.role == 'seller'}">賣家</c:when>
+        <c:otherwise>⚠ 無效角色</c:otherwise>
+    </c:choose>
+）</p>
 
     <h2>${product.id != null ? '修改商品' : '新增商品'}</h2>
 
