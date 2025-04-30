@@ -19,20 +19,24 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class DBUtil {
-	
-	private static final String DB_PATH = "C:/Users/codyc/eclipse-workspace/B2CPlatform/shop.db";
-    private static final String URL = "jdbc:sqlite:" + DB_PATH;
+
+    private static String dbPath; // 由 Servlet 設定
+
+    // 讓外部設定 db 路徑
+    public static void setDbPath(String path) {
+        dbPath = path;
+    }
 
     public static Connection getConnection() {
         Connection conn = null;
         try {
-        	String absolutePath = new java.io.File("shop.db").getAbsolutePath();
-        	System.out.println("📌 SQLite 實際使用的檔案路徑：" + absolutePath);
+            String url = "jdbc:sqlite:" + dbPath;
+            System.out.println("📌 SQLite 使用的路徑：" + dbPath);
 
-            // ✅ 強制載入 SQLite JDBC 驅動
+            // 載入 SQLite 驅動
             Class.forName("org.sqlite.JDBC");
 
-            conn = DriverManager.getConnection(URL);
+            conn = DriverManager.getConnection(url);
             System.out.println("✅ SQLite 連線成功！");
         } catch (ClassNotFoundException e) {
             System.out.println("❌ 找不到 SQLite JDBC 驅動: " + e.getMessage());
