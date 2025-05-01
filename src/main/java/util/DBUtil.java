@@ -17,6 +17,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class DBUtil {
 
@@ -27,13 +30,15 @@ public class DBUtil {
         dbPath = path;
     }
 
-    public static Connection getConnection() {
+
+	public static Connection getConnection() {
         Connection conn = null;
         try {
             String url = "jdbc:sqlite:" + dbPath;
             System.out.println("📌 SQLite 使用的路徑：" + dbPath);
 
             // 載入 SQLite 驅動
+
             Class.forName("org.sqlite.JDBC");
 
             conn = DriverManager.getConnection(url);
