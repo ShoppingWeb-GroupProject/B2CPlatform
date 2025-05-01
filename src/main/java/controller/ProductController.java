@@ -1,10 +1,15 @@
 package controller;
 
 import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletRequest;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
-
 import java.io.IOException;
+import java.util.List;
+
+import dao.UserDAO;
+
+import java.util.ArrayList;
 
 import model.Product;
 import service.ProductService;
@@ -12,34 +17,118 @@ import service.ProductService;
 @SuppressWarnings("serial")
 @WebServlet("/ProductController")
 public class ProductController extends HttpServlet {
+	private ProductService productService = new ProductService();
 
-    private ProductService productService = new ProductService();
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
+		HttpSession session = request.getSession(false);
+		String username = (String) session.getAttribute("username");
+		String role = (String) session.getAttribute("role");
 
-        String action = request.getParameter("action");
-        String name = request.getParameter("name");
-        double price = Double.parseDouble(request.getParameter("price"));
-        int quantity = Integer.parseInt(request.getParameter("quantity"));
+		// 先確認 action 是否為 null 避免 NullPointerException
+		String action = request.getParameter("action");
+		String productId = request.getParameter("productId");
 
-        if ("add".equals(action)) {
-            Product product = new Product();
-            product.setName(name);
-            product.setPrice(price);
-            product.setQuantity(quantity);
-            productService.addProduct(product);
+		if (action == null) {
+			response.sendRedirect("index.jsp");
+			return;
+		}
 
-        } else if ("update".equals(action)) {
-            int id = Integer.parseInt(request.getParameter("id"));
-            Product product = new Product();
-            product.setId(id);
-            product.setName(name);
-            product.setPrice(price);
-            product.setQuantity(quantity);
-            productService.updateProduct(product);
-        }
+		if (action.equals("show")) {
+			// 確保 subject 為 "show" 時才抓取資料
+			List<Product> showProducts = productService.getAllProducts();
+			request.setAttribute("showProducts", showProducts);
+			request.setAttribute("action", "show");
 
-        response.sendRedirect("product-list.jsp");
-    }
+		} else if (action.equals("showForSeller")) {
+			// 確保 subject 為 "show" 時才抓取資料
+			List<Product> showProducts = productService.getSellerProducts(username);
+			request.setAttribute("showProducts", showProducts);
+			request.setAttribute("action", "show");
+
+		} else if (action.equals("modify")) {
+			Product product;
+			int theProductId = productId != null ? Integer.parseInt(productId) : -1;
+			if (theProductId != -1)
+				product = productService.getProductById(theProductId);
+			request.setAttribute("action", "modify");
+
+		} else if (action.equals("delete")) {
+			int theProductId = Integer.parseInt(productId);
+			productService.deleteProduct(theProductId);
+			// 重新導向顯示列表
+			response.sendRedirect("ProductController?action=showForSeller");
+			return;
+		}
+
+		// 將資料傳遞到 JSP 頁面
+		request.setAttribute("action", action);
+
+		// 轉發請求給 JSP 顯示
+		request.getRequestDispatcher("product-list.jsp").forward(request, response);
+	}
+
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		HttpSession session = request.getSession(false);
+		String username = (String) session.getAttribute("username");
+		UserDAO theUserDAO = new UserDAO();
+		int userId = theUserDAO.findUserIdByUsername(username);
+		
+		request.setCharacterEncoding("UTF-8");
+
+		String action = request.getParameter("action");
+		String name = request.getParameter("name");
+		String description = request.getParameter("description");
+		String priceStr = request.getParameter("price");
+		String stockStr = request.getParameter("stock");
+		String categoryIdStr = request.getParameter("categoryId");
+		String idStr = request.getParameter("id");
+
+		double price = 0.0;
+		int stock = 0;
+		int categoryId = 0;
+		int id = 0;
+
+		try {
+			price = Double.parseDouble(priceStr);
+		} catch (NumberFormatException e) {
+			e.printStackTrace(); // 可改為錯誤訊息回傳給前端
+		}
+
+		try {
+			stock = Integer.parseInt(stockStr);
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		}
+
+		try {
+			categoryId = Integer.parseInt(categoryIdStr);
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		}
+
+		ProductService productService = new ProductService();
+
+		if (action.equals("add")) {
+
+			Product product = new Product(0, userId, name, description, categoryId, price, stock);
+			productService.addProduct(product);
+
+		} else if (action.equals("update")) {
+			try {
+				id = Integer.parseInt(idStr);
+			} catch (NumberFormatException e) {
+				e.printStackTrace();
+			}
+
+			Product product = new Product(id, userId, name, description, categoryId, price, stock);
+			productService.updateProduct(product);
+		}
+
+		response.sendRedirect("ProductController?action=showForSeller"); // 可改為你要導向的頁面
+	}
+
 }
