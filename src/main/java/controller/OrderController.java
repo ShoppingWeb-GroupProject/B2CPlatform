@@ -21,14 +21,14 @@ public class OrderController extends HttpServlet {
             throws ServletException, IOException {
 
         HttpSession session = request.getSession(false);
-        if (session == null || session.getAttribute("username") == null) {
+        String username = (String) session.getAttribute("username");
+        String role = (String) session.getAttribute("role");
+        
+        if (session == null || username == null) {
             response.sendRedirect("login.jsp");
             return;
         }
-
-        String username = (String) session.getAttribute("username");
-        String role = (String) session.getAttribute("role");
-
+        
         List<Order> orders = null;
 
         if ("buyer".equals(role)) {
