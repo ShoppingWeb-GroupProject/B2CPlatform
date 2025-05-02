@@ -14,7 +14,7 @@
 		<c:when test="${not empty sessionScope.username}">
 			<p>歡迎，${sessionScope.username}！</p>
 			<ul>
-				<li><a href="cart.jsp">購物車</a></li>
+				<li><a href="CartItemController">購物車</a></li>
 				<li><a href="OrderController">訂單查詢</a></li>
 
 				<c:url var="productShow" value="ProductController">

@@ -50,8 +50,10 @@ public class ProductController extends HttpServlet {
 		} else if (action.equals("modify")) {
 			Product product;
 			int theProductId = productId != null ? Integer.parseInt(productId) : -1;
-			if (theProductId != -1)
+			if (theProductId != -1) {
 				product = productService.getProductById(theProductId);
+				request.setAttribute("product", product);	
+			}
 			request.setAttribute("action", "modify");
 
 		} else if (action.equals("delete")) {
