@@ -1,48 +1,32 @@
-//package util;
-//import java.sql.*;
-//
-//public class DBUtil {
-//    private static final String URL = "jdbc:mariadb://localhost:3306/testdb";
-//    private static final String USER = "root";
-//    private static final String PASSWORD = "cody7658";
-//
-//    public static Connection getConnection() throws Exception {
-//        Class.forName("org.mariadb.jdbc.Driver");
-//        return DriverManager.getConnection(URL, USER, PASSWORD);
-//    }
-//}
 package util;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.io.File;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class DBUtil {
 
-    private static String dbPath; // 由 Servlet 設定
+    // 固定路徑：寫死為專案資料夾下
+    private static final String dbPath = "C:/Users/codyc/eclipse-workspace/B2CPlatform/shop.db";
 
-    // 讓外部設定 db 路徑
-    public static void setDbPath(String path) {
-        dbPath = path;
-    }
-
-
-	public static Connection getConnection() {
+    public static Connection getConnection() {
         Connection conn = null;
         try {
             String url = "jdbc:sqlite:" + dbPath;
-            System.out.println("📌 SQLite 使用的路徑：" + dbPath);
+            System.out.println("📌 SQLite 使用的固定路徑：" + dbPath);
 
             // 載入 SQLite 驅動
-
             Class.forName("org.sqlite.JDBC");
 
             conn = DriverManager.getConnection(url);
-            System.out.println("✅ SQLite 連線成功！");
+
+            // 啟用外鍵約束
+            try (Statement pragmaStmt = conn.createStatement()) {
+                pragmaStmt.execute("PRAGMA foreign_keys = ON;");
+            }
+
+            System.out.println("✅ SQLite 連線成功，外鍵已啟用！");
         } catch (ClassNotFoundException e) {
             System.out.println("❌ 找不到 SQLite JDBC 驅動: " + e.getMessage());
         } catch (SQLException e) {
@@ -50,7 +34,6 @@ public class DBUtil {
         }
         return conn;
     }
-
 
     public static void initDatabase() {
         String[] tableSQLs = {
@@ -154,9 +137,9 @@ public class DBUtil {
             for (String sql : tableSQLs) {
                 stmt.execute(sql);
             }
-            System.out.println("所有資料表建立完成！");
+            System.out.println("✅ 所有資料表建立完成！");
         } catch (SQLException e) {
-            System.out.println("建立資料表失敗: " + e.getMessage());
+            System.out.println("❌ 建立資料表失敗: " + e.getMessage());
         }
     }
 }

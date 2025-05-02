@@ -8,8 +8,16 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * OrderDAO
+ * 用途：
+ *   - 處理訂單資料庫操作，包括新增、查詢、更新
+ */
 public class OrderDAO {
 
+    /**
+     * 建立新訂單（含訂單項目）
+     */
     public boolean createOrder(Order order, List<OrderItem> items) {
         String insertOrderSQL = "INSERT INTO orders (user_id, total_amount, address, status) VALUES (?, ?, ?, ?)";
         String insertOrderItemSQL = "INSERT INTO order_items (order_id, product_id, quantity, price) VALUES (?, ?, ?, ?)";
@@ -17,6 +25,7 @@ public class OrderDAO {
         try (Connection conn = DBUtil.getConnection()) {
             conn.setAutoCommit(false);
 
+            // 插入訂單主表
             try (PreparedStatement orderStmt = conn.prepareStatement(insertOrderSQL, Statement.RETURN_GENERATED_KEYS)) {
                 orderStmt.setInt(1, order.getUserId());
                 orderStmt.setDouble(2, order.getTotalAmount());
@@ -28,6 +37,7 @@ public class OrderDAO {
                 if (generatedKeys.next()) {
                     int orderId = generatedKeys.getInt(1);
 
+                    // 插入訂單項目表
                     try (PreparedStatement itemStmt = conn.prepareStatement(insertOrderItemSQL)) {
                         for (OrderItem item : items) {
                             itemStmt.setInt(1, orderId);
@@ -41,7 +51,7 @@ public class OrderDAO {
                 }
             }
 
-            // 建單完成後，清空購物車
+            // 下單成功後，清空購物車
             try (PreparedStatement clearCartStmt = conn.prepareStatement("DELETE FROM cart_items WHERE user_id = ?")) {
                 clearCartStmt.setInt(1, order.getUserId());
                 clearCartStmt.executeUpdate();
@@ -56,10 +66,15 @@ public class OrderDAO {
         }
     }
 
+    /**
+     * 查詢使用者購物車中的商品項目（用於建立訂單）
+     */
     public List<OrderItem> getCartItems(int userId) {
         List<OrderItem> items = new ArrayList<>();
-        String sql = "SELECT c.product_id, p.price, c.quantity " +
-                     "FROM cart_items c JOIN products p ON c.product_id = p.id " +
+
+        String sql = "SELECT c.product_id, p.name, p.price, c.quantity " +
+                     "FROM cart_items c " +
+                     "JOIN products p ON c.product_id = p.id " +
                      "WHERE c.user_id = ?";
 
         try (Connection conn = DBUtil.getConnection();
@@ -71,6 +86,7 @@ public class OrderDAO {
             while (rs.next()) {
                 OrderItem item = new OrderItem();
                 item.setProductId(rs.getInt("product_id"));
+                item.setProductName(rs.getString("name"));
                 item.setPrice(rs.getDouble("price"));
                 item.setQuantity(rs.getInt("quantity"));
                 items.add(item);
@@ -82,8 +98,10 @@ public class OrderDAO {
 
         return items;
     }
-    
- // 🔵 查詢買家自己的訂單
+
+    /**
+     * 查詢買家自己的訂單
+     */
     public List<Order> findOrdersByUserId(int userId) {
         List<Order> orders = new ArrayList<>();
         String sql = "SELECT id, total_amount, address, status, created_at FROM orders WHERE user_id = ? ORDER BY created_at DESC";
@@ -100,7 +118,7 @@ public class OrderDAO {
                 order.setTotalAmount(rs.getDouble("total_amount"));
                 order.setAddress(rs.getString("address"));
                 order.setStatus(rs.getString("status"));
-                order.setCreatedAt(rs.getString("created_at")); // 要記得有 createdAt 屬性
+                order.setCreatedAt(rs.getString("created_at"));
                 orders.add(order);
             }
 
@@ -110,8 +128,9 @@ public class OrderDAO {
         return orders;
     }
 
-
-    // 🟠 查詢賣家接到的訂單（賣家是接單的人）
+    /**
+     * 查詢賣家接到的訂單
+     */
     public List<Order> findOrdersBySellerId(int sellerId) {
         List<Order> orders = new ArrayList<>();
         String sql = "SELECT o.id, o.total_amount, o.address, o.status, o.created_at, u.username AS buyer_name " +
@@ -136,7 +155,7 @@ public class OrderDAO {
                 order.setAddress(rs.getString("address"));
                 order.setStatus(rs.getString("status"));
                 order.setCreatedAt(rs.getString("created_at"));
-                order.setBuyerName(rs.getString("buyer_name")); // ✨ 讓 seller 看得到買家名稱
+                order.setBuyerName(rs.getString("buyer_name"));
                 orders.add(order);
             }
 
@@ -145,10 +164,13 @@ public class OrderDAO {
         }
         return orders;
     }
-    
- // ✅ 更新訂單狀態
+
+    /**
+     * 更新訂單狀態
+     */
     public boolean updateOrderStatus(int orderId, String newStatus) {
-        String sql = "UPDATE orders SET status=? WHERE id=?";
+        String sql = "UPDATE orders SET status = ? WHERE id = ?";
+
         try (Connection conn = DBUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -163,7 +185,10 @@ public class OrderDAO {
             return false;
         }
     }
-    
+
+    /**
+     * 查詢單一訂單的明細項目
+     */
     public List<OrderItem> findOrderItemsByOrderId(int orderId) {
         List<OrderItem> items = new ArrayList<>();
         String sql = "SELECT p.name, oi.quantity, oi.price " +
@@ -179,7 +204,7 @@ public class OrderDAO {
 
             while (rs.next()) {
                 OrderItem item = new OrderItem();
-                item.setProductName(rs.getString("name"));  // ✨記得OrderItem要有productName欄位！
+                item.setProductName(rs.getString("name"));
                 item.setQuantity(rs.getInt("quantity"));
                 item.setPrice(rs.getDouble("price"));
                 items.add(item);
@@ -190,7 +215,4 @@ public class OrderDAO {
         }
         return items;
     }
-
-
-
 }

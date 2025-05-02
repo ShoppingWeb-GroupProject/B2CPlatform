@@ -1,22 +1,43 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <!DOCTYPE html>
-<html>
+<html lang="zh-Hant">
 <head>
+    <meta charset="UTF-8">
     <title>登入</title>
 </head>
 <body>
+
     <h2>登入</h2>
 
+    <!-- ✅ 登入表單 -->
     <form action="LoginController" method="post">
-        帳號：<input type="text" name="username" required><br>
-        密碼：<input type="password" name="password" required><br>
+        <label>
+            帳號：
+            <input type="text" name="username" required>
+        </label><br>
+        <label>
+            密碼：
+            <input type="password" name="password" required>
+        </label><br>
         <input type="submit" value="登入">
     </form>
 
-    <!-- 用 JSTL 顯示錯誤訊息 -->
+    <!-- ✅ 顯示錯誤訊息（若有） -->
     <c:if test="${not empty error}">
         <p style="color:red;">${error}</p>
     </c:if>
+
+    <!-- ✅ 顯示一般提示訊息（如註冊成功提示） -->
+    <c:if test="${not empty message}">
+        <p style="color:green;">${message}</p>
+    </c:if>
+
+    <!-- ✅ 導覽連結 -->
+    <p>
+        <a href="register.jsp">還沒有帳號？註冊</a> |
+        <a href="index.jsp">回首頁</a>
+    </p>
+
 </body>
 </html>
