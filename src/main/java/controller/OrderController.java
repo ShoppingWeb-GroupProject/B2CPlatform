@@ -35,6 +35,7 @@ public class OrderController extends HttpServlet {
         String role = (String) session.getAttribute("role");
 
         // 如果未登入，導回登入頁
+
         if (session == null || username == null) {
             response.sendRedirect("login.jsp");
             return;

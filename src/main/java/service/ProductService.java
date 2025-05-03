@@ -1,19 +1,55 @@
 package service;
 
 import dao.ProductDAO;
+import dao.UserDAO;
 import model.Product;
-
 import java.util.List;
-
+import java.util.ArrayList;
 /**
  * ProductService
  * 用途：
  *   - 負責商品相關的業務邏輯
  *   - 包含新增、更新、刪除、查詢商品等
  */
+
 public class ProductService {
 
-    private ProductDAO productDAO = new ProductDAO();
+	private static ProductDAO productDAO = new ProductDAO();
+	private static UserDAO userDAO = new UserDAO();
+	private static List<Product> emptyList = new ArrayList<Product>();
+	
+    /**
+     * 查詢所有商品
+     * @return 商品列表
+     */
+	public static List<Product> getAllProducts() {
+		try {
+			return productDAO.findAll();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return emptyList;
+		}
+	}
+	
+    /**
+     * 查詢指定賣家的商品
+     * @param sellerUsername 賣家帳號
+     * @return 商品列表
+     */
+	public static List<Product> getSellerProducts(String username) {
+		try {
+			int sellerId = userDAO.findUserIdByUsername(username);
+			if (sellerId == -1) {
+                return emptyList;
+            }
+			return productDAO.getBySellerId(sellerId);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return emptyList;
+		}
+	}
 
     /**
      * 新增商品
@@ -21,7 +57,7 @@ public class ProductService {
      * @return true = 新增成功；false = 新增失敗
      */
     public boolean addProduct(Product product) {
-        return productDAO.addProduct(product);
+        return productDAO.insert(product);
     }
 
     /**
@@ -30,7 +66,7 @@ public class ProductService {
      * @return true = 更新成功；false = 更新失敗
      */
     public boolean updateProduct(Product product) {
-        return productDAO.updateProduct(product);
+        return productDAO.update(product);
     }
 
     /**
@@ -38,34 +74,18 @@ public class ProductService {
      * @param productId 商品 ID
      * @return true = 刪除成功；false = 刪除失敗
      */
-    public boolean deleteProduct(int productId) {
-        return productDAO.deleteProduct(productId);
+    public static boolean deleteProduct(int productId) {
+        return productDAO.delete(productId);
     }
 
-    /**
-     * 查詢所有商品
-     * @return 商品列表
-     */
-    public List<Product> getAllProducts() {
-        return productDAO.findAll();
-    }
-
-    /**
-     * 查詢指定賣家的商品
-     * @param sellerUsername 賣家帳號
-     * @return 商品列表
-     */
-    public List<Product> getSellerProducts(String sellerUsername) {
-        return productDAO.findBySeller(getSellerIdByUsername(sellerUsername));
-    }
 
     /**
      * 查詢單一商品（依 ID）
      * @param productId 商品 ID
      * @return Product 物件（找不到回傳 null）
      */
-    public Product getProductById(int productId) {
-        return productDAO.findById(productId);
+    public static Product getProductById(int productId) {
+        return productDAO.getById(productId);
     }
 
     /**
@@ -75,17 +95,5 @@ public class ProductService {
      */
     public List<Product> getProductsByCategory(int categoryId) {
         return productDAO.findByCategory(categoryId);
-    }
-
-    /**
-     * 工具：查詢賣家 ID（依帳號）
-     * 注意：需要搭配 UserService 或 UserDAO
-     * @param sellerUsername 賣家帳號
-     * @return 賣家 ID
-     */
-    private int getSellerIdByUsername(String sellerUsername) {
-        // 這裡直接使用 UserDAO，如果要更乾淨可以注入 UserService
-        dao.UserDAO userDAO = new dao.UserDAO();
-        return userDAO.findUserIdByUsername(sellerUsername);
     }
 }

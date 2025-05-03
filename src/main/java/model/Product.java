@@ -8,6 +8,7 @@ package model;
  *   - 用於前台商品列表、商品詳情頁、後台商品管理
  */
 public class Product {
+
     private int id;             // 商品ID（主鍵，自動編號）
     private int sellerId;       // 賣家ID（外鍵，對應 users 表）
     private String name;        // 商品名稱
@@ -98,7 +99,7 @@ public class Product {
     public void setPrice(double price) {
         this.price = price;
     }
-
+    
     /** 設定商品庫存數量 */
     public void setStock(int stock) {
         this.stock = stock;

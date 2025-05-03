@@ -1,83 +1,101 @@
 <%@ page contentType="text/html; charset=UTF-8" session="true" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html>
 <head>
     <meta charset="UTF-8">
     <title>購物車</title>
+    <style>
+        .cart-container {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr); /* 多一欄放刪除按鈕 */
+            font-weight: bold;
+            padding: 10px 0;
+        }
+
+        .cart-item {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid #ccc;
+            align-items: center;
+        }
+
+        .cart-wrapper {
+            max-width: 900px;
+            margin: auto;
+        }
+
+        .total {
+            font-size: 18px;
+            margin-top: 20px;
+        }
+
+        form.remove-form {
+            margin: 0;
+        }
+    </style>
 </head>
 <body>
 
-    <!-- ✅ 檢查登入 -->
     <c:if test="${empty sessionScope.username}">
-        <c:redirect url="login.jsp" />
+        <c:redirect url="login.jsp"/>
     </c:if>
 
-    <h2>🛒 購物車內容</h2>
-    <p>歡迎，${sessionScope.username}！</p>
+    <div class="cart-wrapper">
+        <h2>🛒 購物車頁面</h2>
+        <p>歡迎，${sessionScope.username}，這是您的購物車。</p>
 
-    <!-- ✅ 購物車有內容時 -->
-    <c:if test="${not empty cartItems}">
-        <form action="CartController" method="post">
-            <input type="hidden" name="action" value="clear" />
-            <button type="submit">清空購物車</button>
-        </form>
+        <c:choose>
+            <c:when test="${empty cartItems}">
+                <p>目前購物車是空的。</p>
+            </c:when>
+            <c:otherwise>
+                <!-- 表頭 -->
+                <div class="cart-container">
+                    <div>商品名稱</div>
+                    <div>價格</div>
+                    <div>數量</div>
+                    <div>小計</div>
+                    <div>操作</div>
+                </div>
 
-        <table border="1" cellpadding="5" cellspacing="0">
-            <thead>
-                <tr>
-                    <th>商品名稱</th>
-                    <th>單價</th>
-                    <th>數量</th>
-                    <th>小計</th>
-                    <th>操作</th>
-                </tr>
-            </thead>
-            <tbody>
+                <c:set var="total" value="0" />
                 <c:forEach var="item" items="${cartItems}">
-                    <tr>
-                        <td>${item.productName}</td>
-                        <td>${item.price}</td>
-                        <td>
-                            <!-- ✅ 修改數量表單 -->
-                            <form action="CartController" method="post" style="display:inline;">
-                                <input type="hidden" name="action" value="update" />
-                                <input type="hidden" name="cartItemId" value="${item.id}" />
-                                <input type="number" name="newQuantity" value="${item.quantity}" min="1" required />
-                                <button type="submit">更新</button>
+                    <c:set var="subtotal" value="${item.price * item.quantity}" />
+                    <c:set var="total" value="${total + subtotal}" />
+                    <div class="cart-item">
+                        <div>${item.productName}</div>
+                        <div>$${item.price}</div>
+                        <div>${item.quantity}</div>
+                        <div>$${subtotal}</div>
+                        <div>
+                            <form action="CartItemController" method="post" class="remove-form">
+                                <input type="hidden" name="action" value="remove"/>
+                                <input type="hidden" name="productId" value="${item.productId}" />
+                                <button type="submit">移除</button>
                             </form>
-                        </td>
-                        <td>${item.subtotal}</td>
-                        <td>
-                            <!-- ✅ 刪除項目表單 -->
-                            <form action="CartController" method="post" style="display:inline;">
-                                <input type="hidden" name="action" value="delete" />
-                                <input type="hidden" name="cartItemId" value="${item.id}" />
-                                <button type="submit">刪除</button>
-                            </form>
-                        </td>
-                    </tr>
+                        </div>
+                    </div>
                 </c:forEach>
-            </tbody>
-        </table>
 
-        <p>總金額：${totalAmount}</p>
+                <p class="total"><strong>總金額：</strong> $${total}</p>
 
-        <!-- ✅ 前往結帳 -->
-        <form action="checkout" method="post">
-            <button type="submit">前往結帳</button>
-        </form>
-    </c:if>
+                <!-- 建立訂單 -->
+                <form action="OrderController" method="post">
+                    <label for="address">收件地址：</label>
+                    <input type="text" id="address" name="address" required />
+                    <button type="submit">建立訂單</button>
+                </form>
+            </c:otherwise>
+        </c:choose>
 
-    <!-- ✅ 購物車為空 -->
-    <c:if test="${empty cartItems}">
-        <p>您的購物車目前是空的。</p>
-    </c:if>
-
-    <p>
-        <a href="ProductController?action=show">繼續購物</a> |
+        <br/>
         <a href="index.jsp">回首頁</a>
-    </p>
+    </div>
 
 </body>
 </html>
