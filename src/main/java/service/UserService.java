@@ -15,9 +15,6 @@ public class UserService {
 
     /**
      * 使用者登入
-     * @param username 帳號
-     * @param password 密碼
-     * @return User 物件（登入成功）或 null（登入失敗）
      */
     public User login(String username, String password) {
         return userDAO.findByUsernameAndPassword(username, password);
@@ -25,27 +22,23 @@ public class UserService {
 
     /**
      * 使用者註冊
-     * @param user 傳入要註冊的 User 物件
-     * @return true = 註冊成功；false = 註冊失敗
      */
     public boolean register(User user) {
-        // 確認帳號是否已存在
         User existingUser = userDAO.findByUsername(user.getUsername());
         if (existingUser != null) {
             System.out.println("帳號已存在：" + user.getUsername());
             return false;
         }
-        // 設定預設角色（如果沒帶入的話）
+
         if (user.getRole() == null || user.getRole().isEmpty()) {
             user.setRole("buyer");
         }
+
         return userDAO.addUser(user);
     }
 
     /**
      * 查詢使用者 ID（依帳號）
-     * @param username 帳號
-     * @return userId（找不到則回傳 -1）
      */
     public int getUserIdByUsername(String username) {
         return userDAO.findUserIdByUsername(username);
@@ -53,28 +46,43 @@ public class UserService {
 
     /**
      * 查詢使用者資訊（依帳號）
-     * @param username 帳號
-     * @return User 物件
      */
     public User getUserByUsername(String username) {
         return userDAO.findByUsername(username);
     }
 
     /**
-     * 更新使用者資料（不含密碼）
-     * @param user 傳入要更新的 User 物件
-     * @return true = 更新成功；false = 更新失敗
+     * 更新使用者資料
      */
     public boolean updateUser(User user) {
         return userDAO.updateUser(user);
     }
 
     /**
-     * 刪除使用者（依 ID）
-     * @param userId 使用者 ID
-     * @return true = 刪除成功；false = 刪除失敗
+     * 刪除使用者
      */
     public boolean deleteUser(int userId) {
         return userDAO.deleteUser(userId);
+    }
+
+    /**
+     * 查詢帳號是否已存在
+     */
+    public boolean usernameExists(String username) {
+        return userDAO.findByUsername(username) != null;
+    }
+
+    /**
+     * 查詢 email 是否已存在
+     */
+    public boolean emailExists(String email) {
+        return userDAO.emailExists(email);
+    }
+
+    /**
+     * 查詢 phone 是否已存在
+     */
+    public boolean phoneExists(String phone) {
+        return userDAO.phoneExists(phone);
     }
 }

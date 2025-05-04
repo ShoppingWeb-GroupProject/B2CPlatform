@@ -15,6 +15,8 @@
 			<p>歡迎，${sessionScope.username}！</p>
 			<ul>
 				<li><a href="CartItemController">購物車</a></li>
+				<li><a href="MemberController?action=list">會員管理</a></li>
+				<li><a href="discountForm.jsp">折扣設定</a></li>
 				<li><a href="OrderController">訂單查詢</a></li>
 
 				<c:url var="productShow" value="ProductController">
