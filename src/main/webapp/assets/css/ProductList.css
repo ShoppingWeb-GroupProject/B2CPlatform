@@ -1,0 +1,51 @@
+@charset "UTF-8";
+
+.grid-header, .grid-row {
+	display: grid;
+	gap: 10px;
+	padding: 10px 0;
+	border-bottom: 1px solid #ccc;
+}
+
+.grid-header {
+	font-weight: bold;
+	background-color: #f5f5f5;
+}
+
+.grid-row {
+	border-color: #eee;
+	grid-template-columns: repeat(3, 1fr);
+	padding: 20px;
+}
+
+.grid-all {
+	grid-template-columns: repeat(6, 1fr);
+}
+
+.grid-ForSeller {
+	grid-template-columns: repeat(6, 1fr);
+}
+
+.form-grid {
+	display: grid;
+	grid-template-columns: 150px 1fr;
+	gap: 10px 15px;
+	align-items: center;
+	max-width: 600px;
+	margin-bottom: 1em;
+}
+
+.form-grid textarea {
+	width: 100%;
+}
+
+.form-actions {
+	grid-column: 1/-1;
+	text-align: right;
+}
+
+@media screen and (max-width: 900px) {
+  .grid-row {
+    grid-template-columns: 1fr;
+  }
+}

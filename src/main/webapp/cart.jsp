@@ -2,44 +2,10 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>購物車</title>
-    <style>
-        .cart-container {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr); /* 多一欄放刪除按鈕 */
-            font-weight: bold;
-            padding: 10px 0;
-        }
-
-        .cart-item {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 10px;
-            padding: 8px 0;
-            border-bottom: 1px solid #ccc;
-            align-items: center;
-        }
-
-        .cart-wrapper {
-            max-width: 900px;
-            margin: auto;
-        }
-
-        .total {
-            font-size: 18px;
-            margin-top: 20px;
-        }
-
-        form.remove-form {
-            margin: 0;
-        }
-    </style>
-</head>
-<body>
+<%
+    request.setAttribute("pageTitle", "購物車");
+%>
+<%@ include file="/templates/header.jsp"%>
 
     <c:if test="${empty sessionScope.username}">
         <c:redirect url="login.jsp"/>
@@ -92,10 +58,5 @@
                 </form>
             </c:otherwise>
         </c:choose>
-
-        <br/>
-        <a href="index.jsp">回首頁</a>
     </div>
-
-</body>
-</html>
+<%@ include file="/templates/footer.jsp"%>

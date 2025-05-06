@@ -1,0 +1,31 @@
+@charset "UTF-8";
+
+.cart-container {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr); /* 多一欄放刪除按鈕 */
+            font-weight: bold;
+            padding: 10px 0;
+        }
+
+        .cart-item {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid #ccc;
+            align-items: center;
+        }
+
+        .cart-wrapper {
+            max-width: 900px;
+            margin: auto;
+        }
+
+        .total {
+            font-size: 18px;
+            margin-top: 20px;
+        }
+
+        form.remove-form {
+            margin: 0;
+        }
