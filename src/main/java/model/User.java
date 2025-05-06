@@ -6,12 +6,21 @@ public class User {
     private String password;
     private String email;
     private String role;
-    private double discount;
     private boolean isBlacklisted;
     private String phone;  
     private String address; 
+    private double discount;
 
     // === Getter & Setter ===
+
+    public double getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(double discount) {
+        this.discount = discount;
+    }
+
 
     public int getId() {
         return id;
@@ -46,13 +55,6 @@ public class User {
     }
     public void setRole(String role) {
         this.role = role;
-    }
-
-    public double getDiscount() {
-        return discount;
-    }
-    public void setDiscount(double discount) {
-        this.discount = discount;
     }
 
     public boolean isBlacklisted() {

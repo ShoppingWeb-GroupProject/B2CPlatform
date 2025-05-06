@@ -1,122 +1,71 @@
-<%@ page contentType="text/html; charset=UTF-8" %>
-<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ page contentType="text/html; charset=UTF-8" session="true"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html>
 <head>
     <meta charset="UTF-8">
     <title>註冊</title>
-    <style>
-        .error { color: red; font-size: 0.9em; }
-        .success { color: green; font-size: 0.9em; }
-    </style>
     <script>
-        function validatePasswordMatch() {
-            const pw1 = document.getElementById("password").value;
-            const pw2 = document.getElementById("confirmPassword").value;
-            const errorText = document.getElementById("pwError");
-            const submitBtn = document.getElementById("submitBtn");
-
-            if (pw1 !== pw2) {
-                errorText.textContent = "⚠ 兩次輸入的密碼不一致";
-                submitBtn.disabled = true;
-            } else {
-                errorText.textContent = "";
-                submitBtn.disabled = false;
-            }
+    function checkField(field, value, resultSpanId) {
+        if (!value) {
+            document.getElementById(resultSpanId).textContent = '';
+            return;
         }
-
-        function checkFieldAvailability(field, value) {
-            const msgElem = document.getElementById(field + "Msg");
-            const submitBtn = document.getElementById("submitBtn");
-
-            if (value.trim() === "") {
-                msgElem.textContent = "";
-                msgElem.className = "";
-                submitBtn.disabled = true;
-                return;
-            }
-
-            const xhr = new XMLHttpRequest();
-            xhr.open("GET", "CheckDuplicateServlet?field=" + field + "&value=" + encodeURIComponent(value), true);
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState === 4 && xhr.status === 200) {
-                    const response = xhr.responseText.trim();
-
-                    let label = field === "username" ? "帳號" :
-                                field === "email" ? "Email 信箱" : "手機號碼";
-
-                    if (response === "exists") {
-                        msgElem.textContent = `⚠ ${label}${value}已被註冊，請更換`;
-                        msgElem.className = "error";
-                        submitBtn.disabled = true;
-                    } else {
-                        msgElem.textContent = "";
-                        msgElem.className = "";
-                        validatePasswordMatch(); // 檢查密碼一致性
-                    }
+        fetch('CheckDuplicateServlet?field=' + field + '&value=' + encodeURIComponent(value))
+            .then(response => response.text())
+            .then(result => {
+                if (result === 'exists') {
+                    document.getElementById(resultSpanId).textContent = field + ' 已存在';
+                } else {
+                    document.getElementById(resultSpanId).textContent = field + ' 可用';
                 }
-            };
-            xhr.send();
-        }
-
-
+            });
+    }
     </script>
 </head>
 <body>
+    <h2>註冊帳號</h2>
 
-<h2>註冊</h2>
+    <!-- 顯示錯誤或成功訊息 -->
+    <c:if test="${not empty error}">
+        <p style="color: red;">${error}</p>
+    </c:if>
+    <c:if test="${not empty message}">
+        <p style="color: green;">${message}</p>
+    </c:if>
 
-<form action="RegisterController" method="post">
-    <label>帳號：
-        <input type="text" name="username" id="username" required 
-               onblur="checkFieldAvailability('username', this.value)" 
-               value="${username}" />
-    </label> <span id="usernameMsg" class="error"></span><br/>
+    <form action="RegisterController" method="post">
+        <label>帳號：</label>
+        <input type="text" name="username" id="username" value="${username}" required 
+               onblur="checkField('username', this.value, 'usernameCheck')">
+        <span id="usernameCheck" style="margin-left: 10px; color: blue;"></span>
+        <br><br>
 
-    <label>密碼：
-        <input type="password" id="password" name="password" 
-               oninput="validatePasswordMatch()" required />
-    </label><br/>
+        <label>密碼：</label>
+        <input type="password" name="password" required>
+        <br><br>
 
-    <label>密碼確認：
-        <input type="password" id="confirmPassword" name="confirmPassword" 
-               oninput="validatePasswordMatch()" required />
-    </label>
-    <span id="pwError" class="error"></span><br/>
+        <label>確認密碼：</label>
+        <input type="password" name="confirmPassword" required>
+        <br><br>
 
-    <label>手機：
-        <input type="text" name="phone" id="phone" required 
-               onblur="checkFieldAvailability('phone', this.value)" 
-               value="${phone}" />
-    </label> <span id="phoneMsg" class="error"></span><br/>
+        <label>Email：</label>
+        <input type="email" name="email" id="email" value="${email}" required 
+               onblur="checkField('email', this.value, 'emailCheck')">
+        <span id="emailCheck" style="margin-left: 10px; color: blue;"></span>
+        <br><br>
 
-    <label>Email：
-        <input type="email" name="email" id="email" required 
-               onblur="checkFieldAvailability('email', this.value)" 
-               value="${email}" />
-    </label> <span id="emailMsg" class="error"></span><br/>
+        <label>手機：</label>
+        <input type="tel" name="phone" id="phone" value="${phone}" required 
+               onblur="checkField('phone', this.value, 'phoneCheck')">
+        <span id="phoneCheck" style="margin-left: 10px; color: blue;"></span>
+        <br><br>
 
-    <label>地址：
-        <input type="text" name="address" value="${address}" required />
-    </label><br/>
+        <label>地址：</label>
+        <input type="text" name="address" value="${address}">
+        <br><br>
 
-    <input type="submit" id="submitBtn" value="註冊" />
-</form>
-
-<!-- 錯誤訊息 -->
-<c:if test="${not empty error}">
-    <p class="error">${error}</p>
-</c:if>
-
-<!-- 成功訊息 -->
-<c:if test="${not empty message}">
-    <p class="success">${message}</p>
-</c:if>
-
-<p>
-    已有帳號？<a href="login.jsp">登入</a> |
-    <a href="index.jsp">回首頁</a>
-</p>
-
+        <button type="submit">註冊</button>
+    </form>
 </body>
 </html>

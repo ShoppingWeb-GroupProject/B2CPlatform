@@ -9,6 +9,7 @@ import java.io.IOException;
 import model.User;
 import service.UserService;
 
+@SuppressWarnings("serial")
 @WebServlet("/RegisterController")
 public class RegisterController extends HttpServlet {
 

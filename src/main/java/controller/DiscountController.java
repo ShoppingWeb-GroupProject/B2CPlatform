@@ -4,21 +4,30 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 
-import dao.UserDAO;
+import model.Discount;
+import service.DiscountService;
+import service.UserService;
 
 import java.io.IOException;
 
+/**
+ * 折扣控制器
+ * 負責處理折扣相關的顯示與更新操作
+ */
 @WebServlet("/DiscountController")
 public class DiscountController extends HttpServlet {
+
     private static final long serialVersionUID = 1L;
-    private UserDAO userDAO;
+    private DiscountService discountService;
+    private UserService userService;
 
     @Override
     public void init() {
-        userDAO = new UserDAO();
+        discountService = new DiscountService();
+        userService = new UserService();
     }
 
-    // GET: show discount by username
+    // 處理 GET 請求：顯示折扣資料頁面
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -26,20 +35,20 @@ public class DiscountController extends HttpServlet {
         String username = request.getParameter("username");
 
         if (username != null && !username.isEmpty()) {
-            int userId = userDAO.findUserIdByUsername(username);
+            int userId = userService.getUserIdByUsername(username);
             if (userId != -1) {
-                double currentDiscount = userDAO.getUserDiscount(userId);
+                Discount discount = discountService.getDiscountByUserId(userId);
                 request.setAttribute("username", username);
-                request.setAttribute("currentDiscount", currentDiscount);
+                request.setAttribute("discount", discount);
             } else {
-                request.setAttribute("error", "User not found.");
+                request.setAttribute("error", "查無此會員。");
             }
         }
 
         request.getRequestDispatcher("discountForm.jsp").forward(request, response);
     }
 
-    // POST: update discount by username
+    // 處理 POST 請求：更新折扣資料
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -48,30 +57,32 @@ public class DiscountController extends HttpServlet {
         String discountStr = request.getParameter("discount");
 
         if (username == null || username.isEmpty() || discountStr == null || discountStr.isEmpty()) {
-            request.setAttribute("error", "Username and discount are required.");
+            request.setAttribute("error", "請輸入會員帳號與折扣值。");
             request.setAttribute("username", username);
             request.getRequestDispatcher("discountForm.jsp").forward(request, response);
             return;
         }
 
         try {
-            double discount = Double.parseDouble(discountStr);
-            int userId = userDAO.findUserIdByUsername(username);
+            double discountValue = Double.parseDouble(discountStr);
+            int userId = userService.getUserIdByUsername(username);
 
             if (userId == -1) {
-                request.setAttribute("error", "User not found.");
+                request.setAttribute("error", "查無此會員。");
                 request.setAttribute("username", username);
                 request.getRequestDispatcher("discountForm.jsp").forward(request, response);
                 return;
             }
 
-            userDAO.updateUserDiscount(userId, discount);
+            discountService.updateUserDiscount(userId, discountValue);
 
-            // ✅ 折扣設定成功後跳轉回會員管理頁面
-            response.sendRedirect("MemberController?action=list");
+            request.setAttribute("message", "折扣設定成功！");
+            request.setAttribute("username", username);
+            request.setAttribute("discount", discountService.getDiscountByUserId(userId));
+            request.getRequestDispatcher("discountForm.jsp").forward(request, response);
 
         } catch (NumberFormatException e) {
-            request.setAttribute("error", "Invalid discount format.");
+            request.setAttribute("error", "折扣值格式錯誤，請輸入數字。");
             request.setAttribute("username", username);
             request.getRequestDispatcher("discountForm.jsp").forward(request, response);
         }

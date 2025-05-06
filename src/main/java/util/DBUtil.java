@@ -8,7 +8,7 @@ import java.sql.Statement;
 public class DBUtil {
 
     // 固定路徑：寫死為專案資料夾下
-    private static final String dbPath = "C:\\Users\\User\\git\\B2CPlatform\\shop.db";
+    private static final String dbPath = "C:\\Users\\codyc\\eclipse-workspace\\B2CPlatform\\shop.db";
 
     public static Connection getConnection() {
         Connection conn = null;
@@ -38,14 +38,18 @@ public class DBUtil {
     public static void initDatabase() {
         String[] tableSQLs = {
             // USERS
-            "CREATE TABLE IF NOT EXISTS users (" +
-            "id INTEGER PRIMARY KEY AUTOINCREMENT," +
-            "username TEXT NOT NULL UNIQUE," +
-            "password TEXT NOT NULL," +
-            "email TEXT NOT NULL UNIQUE," +
-            "role TEXT CHECK(role IN ('buyer', 'seller', 'admin')) DEFAULT 'buyer'," +
-            "created_at DATETIME DEFAULT CURRENT_TIMESTAMP" +
-            ");",
+        	"""
+            CREATE TABLE IF NOT EXISTS users (
+            id INT PRIMARY KEY AUTO_INCREMENT,
+            username VARCHAR(50) NOT NULL UNIQUE,
+            password VARCHAR(255) NOT NULL,
+            email VARCHAR(100) UNIQUE,
+            phone VARCHAR(20),
+            address VARCHAR(255),
+            role VARCHAR(20) DEFAULT 'buyer',
+            is_blacklisted BOOLEAN DEFAULT FALSE
+            );
+            """,
 
             // CATEGORIES
             "CREATE TABLE IF NOT EXISTS categories (" +
@@ -124,13 +128,17 @@ public class DBUtil {
             ");",
 
             // DISCOUNT
-            "CREATE TABLE IF NOT EXISTS discount (" +
-            "id INTEGER PRIMARY KEY AUTOINCREMENT," +
-            "name TEXT NOT NULL," +
-            "description TEXT," +
-            "discount_value REAL NOT NULL," +
-            "is_active BOOLEAN DEFAULT TRUE" +
-            ");"
+            """
+            CREATE TABLE IF NOT EXISTS discount (
+            id INT PRIMARY KEY AUTO_INCREMENT,
+            user_id INT NOT NULL,
+            name VARCHAR(100) DEFAULT '未設定',
+            description VARCHAR(255) DEFAULT '無描述',
+            discount_value DOUBLE DEFAULT 1.0,
+            is_active BOOLEAN DEFAULT TRUE,
+            FOREIGN KEY (user_id) REFERENCES users(id)
+            );
+            """
         };
 
         try (Connection conn = getConnection(); Statement stmt = conn.createStatement()) {
