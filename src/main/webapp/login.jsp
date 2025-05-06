@@ -1,12 +1,11 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
-<!DOCTYPE html>
-<html lang="zh-Hant">
-<head>
-    <meta charset="UTF-8">
-    <title>登入</title>
-</head>
-<body>
+<%
+    request.setAttribute("pageTitle", "登入");
+%>
+<%@ include file="/templates/header.jsp"%>
+
 
     <h2>登入</h2>
 
@@ -33,11 +32,4 @@
         <p style="color:green;">${message}</p>
     </c:if>
 
-    <!-- ✅ 導覽連結 -->
-    <p>
-        <a href="register.jsp">還沒有帳號？註冊</a> |
-        <a href="index.jsp">回首頁</a>
-    </p>
-
-</body>
-</html>
+<%@ include file="/templates/footer.jsp"%>

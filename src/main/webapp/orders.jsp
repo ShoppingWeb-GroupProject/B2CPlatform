@@ -1,12 +1,9 @@
 <%@ page contentType="text/html; charset=UTF-8" session="true" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
-<!DOCTYPE html>
-<html lang="zh-Hant">
-<head>
-    <meta charset="UTF-8">
-    <title>訂單管理</title>
-</head>
-<body>
+<%
+    request.setAttribute("pageTitle", "訂單管理");
+%>
+<%@ include file="/templates/header.jsp"%>
 
     <!-- ✅ 檢查是否登入與有角色，否則導向登入頁 -->
     <c:if test="${empty sessionScope.username or empty sessionScope.role}">
@@ -109,10 +106,4 @@
             </tbody>
         </table>
     </c:if>
-
-    <br>
-    <!-- ✅ 回首頁連結 -->
-    <a href="index.jsp">回首頁</a>
-
-</body>
-</html>
+<%@ include file="/templates/footer.jsp"%>
