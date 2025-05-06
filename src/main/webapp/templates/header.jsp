@@ -33,7 +33,8 @@
 
 <link rel="stylesheet" href="<c:url value='/assets/css/CartItem.css' />">
 
-<link rel="stylesheet" href="<c:url value='/assets/css/ProductList.css' />">
+<link rel="stylesheet"
+	href="<c:url value='/assets/css/ProductList.css' />">
 
 <!--
 
@@ -69,7 +70,21 @@ https://templatemo.com/tm-571-hexashop
 								class="active">首頁</a></li>
 							<li class="scroll-to-section"><a href="CartItemController">購物車</a></li>
 							<li class="scroll-to-section"><a href="OrderController">訂單查詢</a></li>
-							<li class="submenu"><a href="javascript:;">Pages</a>
+
+							<c:url var="productShow" value="ProductController">
+								<c:param name="action" value="show" />
+							</c:url>
+							<c:url var="productShowSeller" value="ProductController">
+								<c:param name="action" value="showForSeller" />
+							</c:url>
+							<c:if test="${not empty sessionScope.role && sessionScope.role=='buyer'}">
+								<li><a href="${productShow}">逛逛商品</a></li>
+							</c:if>
+							<c:if test="${not empty sessionScope.role && sessionScope.role=='seller'}">
+								<li><a href="${productShowSeller}">我的商品</a></li>
+							</c:if>
+							
+							<!--<li class="submenu"><a href="javascript:;">Pages</a>
 								<ul>
 									<li><a href="about.html">About Us</a></li>
 									<li><a href="products.html">Products</a></li>
@@ -83,8 +98,14 @@ https://templatemo.com/tm-571-hexashop
 									<li><a href="#">Features Page 3</a></li>
 									<li><a rel="nofollow" href="https://templatemo.com/page/4"
 										target="_blank">Template Page 4</a></li>
-								</ul></li>
-							<li class="scroll-to-section"><a href="#explore">Explore</a></li>
+								</ul></li>-->
+							<c:if test="${empty sessionScope.username}">
+								<li class="scroll-to-section"><a href="register.jsp">註冊</a></li>
+								<li class="scroll-to-section"><a href="login.jsp">登入</a></li>
+							</c:if>
+							<c:if test="${not empty sessionScope.username}">
+								<li class="scroll-to-section"><a href="LogoutController">登出</a></li>
+							</c:if>
 						</ul>
 						<a class='menu-trigger'> <span>Menu</span>
 						</a>

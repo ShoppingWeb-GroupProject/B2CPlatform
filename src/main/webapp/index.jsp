@@ -6,9 +6,8 @@
 %>
 <%@ include file="/templates/header.jsp"%>
 
-<h1>ProjectShop 首頁</h1>
 
-<c:choose>
+<!--<c:choose>
 	<c:when test="${not empty sessionScope.username}">
 		<p>歡迎，${sessionScope.username}！</p>
 		<ul>
@@ -35,7 +34,7 @@
 			<li><a href="login.jsp">登入</a></li>
 		</ul>
 	</c:otherwise>
-</c:choose>
+</c:choose>-->
 
 <hr>
 

@@ -58,10 +58,5 @@
                 </form>
             </c:otherwise>
         </c:choose>
-
-        <br/>
-        <a href="index.jsp">回首頁</a>
     </div>
-
-</body>
-</html>
+<%@ include file="/templates/footer.jsp"%>
