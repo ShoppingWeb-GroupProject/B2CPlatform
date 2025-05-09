@@ -8,8 +8,14 @@ import java.sql.Statement;
 public class DBUtil {
 
     // 固定路徑：寫死為專案資料夾下
+<<<<<<< HEAD
 
     private static final String dbPath = "C:\\Users\\User\\Desktop\\project\\B2CPlatform\\shop.db";
+=======
+    //private static final String dbPath = "C:\\Users\\USER\\Desktop\\aaa\\B2CPlatform\\shop.db";
+	private static final String dbPath = "C:\\Users\\user\\Desktop\\GroupProject\\B2CPlatform\\shop.db";
+
+>>>>>>> origin/test-pinying
 
     public static Connection getConnection() {
         Connection conn = null;
