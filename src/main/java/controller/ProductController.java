@@ -62,12 +62,6 @@ public class ProductController extends HttpServlet {
 			// 重新導向顯示列表
 			response.sendRedirect("ProductController?action=showForSeller");
 			return;
-		} else if (action.equals("detail")) {
-			int theProductId = Integer.parseInt(productId);
-		    Product product = ProductService.getProductById(theProductId);
-		    request.setAttribute("product", product);
-		    request.setAttribute("action", "show");
-		    request.getRequestDispatcher("product-detail.jsp").forward(request, response);
 		}
 
 		// 將資料傳遞到 JSP 頁面
