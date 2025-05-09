@@ -9,7 +9,7 @@ public class DBUtil {
 
     // 固定路徑：寫死為專案資料夾下
 
-    private static final String dbPath = "C:\\Users\\User\\Desktop\\project\\B2CPlatform\\shop.db";
+    private static final String dbPath = "C:\\Users\\codyc\\eclipse-workspace\\B2CPlatform\\shop.db";
 
     public static Connection getConnection() {
         Connection conn = null;

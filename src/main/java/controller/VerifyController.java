@@ -9,6 +9,7 @@ import service.UserService;
 
 import java.io.IOException;
 
+@SuppressWarnings("serial")
 @WebServlet("/VerifyController")
 public class VerifyController extends HttpServlet {
 

@@ -5,13 +5,13 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 
 import java.io.IOException;
-import java.util.Properties;
 import java.util.Random;
 
 import model.User;
 import service.UserService;
 import util.MailUtil;
 
+@SuppressWarnings("serial")
 @WebServlet("/RegisterController")
 public class RegisterController extends HttpServlet {
 
