@@ -6,7 +6,6 @@
 %>
 <%@ include file="/templates/header.jsp"%>
 
-
 <!--<c:choose>
 	<c:when test="${not empty sessionScope.username}">
 		<p>歡迎，${sessionScope.username}！</p>

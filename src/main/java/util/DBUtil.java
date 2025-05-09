@@ -9,6 +9,7 @@ public class DBUtil {
 
     // 固定路徑：寫死為專案資料夾下
 
+
     private static final String dbPath = "C:\\Users\\codyc\\eclipse-workspace\\B2CPlatform\\shop.db";
 
     public static Connection getConnection() {
@@ -35,22 +36,27 @@ public class DBUtil {
         }
         return conn;
     }
+    
+    
 
     public static void initDatabase() {
+    	
+
         String[] tableSQLs = {
-            // USERS
-        	"""
-            CREATE TABLE IF NOT EXISTS users (
-            id INT PRIMARY KEY AUTO_INCREMENT,
-            username VARCHAR(50) NOT NULL UNIQUE,
-            password VARCHAR(255) NOT NULL,
-            email VARCHAR(100) UNIQUE,
-            phone VARCHAR(20),
-            address VARCHAR(255),
-            role VARCHAR(20) DEFAULT 'buyer',
-            is_blacklisted BOOLEAN DEFAULT FALSE
-            );
-            """,
+    		// USERS
+    	    """
+    	    CREATE TABLE IF NOT EXISTS users (
+    	    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    	    username VARCHAR(50) NOT NULL UNIQUE,
+    	    password VARCHAR(255) NOT NULL,
+    	    email VARCHAR(100) UNIQUE,
+    	    phone VARCHAR(20),
+    	    address VARCHAR(255),
+    	    role VARCHAR(20) DEFAULT 'buyer',
+    	    is_blacklisted BOOLEAN DEFAULT FALSE,
+    	    discount DOUBLE DEFAULT 1.0
+    	    );
+    	    """,
 
             // CATEGORIES
             "CREATE TABLE IF NOT EXISTS categories (" +
@@ -131,7 +137,7 @@ public class DBUtil {
             // DISCOUNT
             """
             CREATE TABLE IF NOT EXISTS discount (
-            id INT PRIMARY KEY AUTO_INCREMENT,
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
             user_id INT NOT NULL,
             name VARCHAR(100) DEFAULT '未設定',
             description VARCHAR(255) DEFAULT '無描述',
@@ -150,5 +156,25 @@ public class DBUtil {
         } catch (SQLException e) {
             System.out.println("❌ 建立資料表失敗: " + e.getMessage());
         }
-    }
+    
+    
+    String[] insertCategories = {
+    		"""
+		    INSERT INTO categories (name, description) VALUES ('電子產品', '各式電子裝置、配件');
+			INSERT INTO categories (name, description) VALUES ('服飾', '男女服飾、鞋包、配件');
+			INSERT INTO categories (name, description) VALUES ('書籍', '各類書籍、雜誌、漫畫');
+			INSERT INTO categories (name, description) VALUES ('美妝保養', '化妝品、護膚品、保養用品');
+			INSERT INTO categories (name, description) VALUES ('家居用品', '家具、廚房用品、家用工具');
+    		"""
+		};
+
+		try (Connection conn = DBUtil.getConnection(); Statement stmt = conn.createStatement()) {
+		    for (String sql : insertCategories) {
+		        stmt.executeUpdate(sql);
+		    }
+		    System.out.println("✅ categories 資料建立完成！");
+		} catch (SQLException e) {
+		    System.out.println("❌ 建立 categories 資料失敗: " + e.getMessage());
+		}
+	}
 }

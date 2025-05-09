@@ -52,7 +52,7 @@ https://templatemo.com/tm-571-hexashop
 				<div class="col-12">
 					<nav class="main-nav">
 						<!-- ***** Logo Start ***** -->
-						<a href="index.html" class="logo"> <img
+						<a href="index.jsp" class="logo"> <img
 							src="assets/images/logo.png">
 						</a>
 						<!-- ***** Logo End ***** -->
@@ -71,6 +71,7 @@ https://templatemo.com/tm-571-hexashop
 							<li class="scroll-to-section"><a href="CartItemController">購物車</a></li>
 							<li class="scroll-to-section"><a href="OrderController">訂單查詢</a></li>
 							<li class="scroll-to-section"><a href="UserController?action=list">會員管理</a></li>
+							<li class="scroll-to-section"><a href="CategoryController">商品分類設定</a></li>
 							<li class="scroll-to-section"><a href="discountForm.jsp">折扣設定</a></li>
 							
 							<c:url var="productShow" value="ProductController">

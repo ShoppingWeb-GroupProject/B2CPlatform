@@ -6,7 +6,9 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import java.io.IOException;
 import java.util.List;
+import java.util.Locale.Category;
 
+import dao.CategoryDAO;
 import dao.UserDAO;
 
 import java.util.ArrayList;
@@ -48,13 +50,20 @@ public class ProductController extends HttpServlet {
 			request.setAttribute("action", "show");
 
 		} else if (action.equals("modify")) {
-			Product product;
-			int theProductId = productId != null ? Integer.parseInt(productId) : -1;
-			if (theProductId != -1) {
-				product = ProductService.getProductById(theProductId);
-				request.setAttribute("product", product);	
-			}
-			request.setAttribute("action", "modify");
+		    int theProductId = productId != null ? Integer.parseInt(productId) : -1;
+		    if (theProductId != -1) {
+		        Product product = ProductService.getProductById(theProductId);
+		        request.setAttribute("product", product);
+		    }
+
+		    // 查詢分類列表
+		    CategoryDAO categoryDAO = new CategoryDAO();
+		    List<model.Category> categories = categoryDAO.findAllCategories();
+		    request.setAttribute("categories", categories);
+
+		    request.setAttribute("action", "modify");
+		    request.getRequestDispatcher("product-list.jsp").forward(request, response);
+		    return;
 
 		} else if (action.equals("delete")) {
 			int theProductId = Integer.parseInt(productId);
@@ -62,6 +71,12 @@ public class ProductController extends HttpServlet {
 			// 重新導向顯示列表
 			response.sendRedirect("ProductController?action=showForSeller");
 			return;
+		} else if (action.equals("detail")) {
+			int theProductId = Integer.parseInt(productId);
+		    Product product = ProductService.getProductById(theProductId);
+		    request.setAttribute("product", product);
+		    request.setAttribute("action", "show");
+		    request.getRequestDispatcher("product-detail.jsp").forward(request, response);
 		}
 
 		// 將資料傳遞到 JSP 頁面
