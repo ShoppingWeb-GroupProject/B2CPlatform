@@ -23,6 +23,25 @@
                 console.error('驗證失敗:', error);
             });
     }
+    
+    function validatePasswordMatch() {
+        const password = document.querySelector('input[name="password"]').value;
+        const confirmPassword = document.querySelector('input[name="confirmPassword"]').value;
+        const messageSpan = document.getElementById("passwordCheck");
+
+        if (!confirmPassword) {
+            messageSpan.textContent = '';
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            messageSpan.textContent = "密碼不一致";
+            messageSpan.style.color = "red";
+        } else {
+            messageSpan.textContent = "";
+        }
+    }
+
     </script>
 </head>
 <body>
@@ -44,12 +63,13 @@
         <br><br>
 
         <label>密碼：</label>
-        <input type="password" name="password" required>
+        <input type="password" name="password" required oninput="validatePasswordMatch()">
         <br><br>
 
         <label>確認密碼：</label>
-        <input type="password" name="confirmPassword" required>
-        <br><br>
+        <input type="password" name="confirmPassword" required oninput="validatePasswordMatch()">
+		<span id="passwordCheck" style="margin-left: 10px;"></span>
+		<br><br>
 
         <label>Email：</label>
         <input type="email" name="email" id="email" value="${email}" required 
