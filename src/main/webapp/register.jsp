@@ -11,14 +11,16 @@
             document.getElementById(resultSpanId).textContent = '';
             return;
         }
+
         fetch('CheckDuplicateServlet?field=' + field + '&value=' + encodeURIComponent(value))
-            .then(response => response.text())
-            .then(result => {
-                if (result === 'exists') {
-                    document.getElementById(resultSpanId).textContent = field + ' 已存在';
-                } else {
-                    document.getElementById(resultSpanId).textContent = field + ' 可用';
-                }
+            .then(response => response.json()) // ⬅️ 解析 JSON 回應
+            .then(data => {
+                const span = document.getElementById(resultSpanId);
+                span.textContent = data.message;
+                span.style.color = data.status === 'exists' ? 'red' : 'blue';
+            })
+            .catch(error => {
+                console.error('驗證失敗:', error);
             });
     }
     </script>
@@ -26,7 +28,7 @@
 <body>
     <h2>註冊帳號</h2>
 
-    <!-- 顯示錯誤或成功訊息 -->
+    <!-- 顯示後端錯誤或成功訊息 -->
     <c:if test="${not empty error}">
         <p style="color: red;">${error}</p>
     </c:if>
@@ -38,7 +40,7 @@
         <label>帳號：</label>
         <input type="text" name="username" id="username" value="${username}" required 
                onblur="checkField('username', this.value, 'usernameCheck')">
-        <span id="usernameCheck" style="margin-left: 10px; color: blue;"></span>
+        <span id="usernameCheck" style="margin-left: 10px;"></span>
         <br><br>
 
         <label>密碼：</label>
@@ -52,13 +54,13 @@
         <label>Email：</label>
         <input type="email" name="email" id="email" value="${email}" required 
                onblur="checkField('email', this.value, 'emailCheck')">
-        <span id="emailCheck" style="margin-left: 10px; color: blue;"></span>
+        <span id="emailCheck" style="margin-left: 10px;"></span>
         <br><br>
 
         <label>手機：</label>
         <input type="tel" name="phone" id="phone" value="${phone}" required 
                onblur="checkField('phone', this.value, 'phoneCheck')">
-        <span id="phoneCheck" style="margin-left: 10px; color: blue;"></span>
+        <span id="phoneCheck" style="margin-left: 10px;"></span>
         <br><br>
 
         <label>地址：</label>
