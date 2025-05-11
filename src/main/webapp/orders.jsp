@@ -1,109 +1,117 @@
-<%@ page contentType="text/html; charset=UTF-8" session="true" %>
-<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ page contentType="text/html; charset=UTF-8" session="true"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core"%>
 <%
-    request.setAttribute("pageTitle", "訂單管理");
+request.setAttribute("pageTitle", "訂單管理");
 %>
 <%@ include file="/templates/header.jsp"%>
 
-    <!-- ✅ 檢查是否登入與有角色，否則導向登入頁 -->
-    <c:if test="${empty sessionScope.username or empty sessionScope.role}">
-        <c:redirect url="login.jsp" />
-    </c:if>
+<!-- ✅ 檢查是否登入與有角色，否則導向登入頁 -->
+<c:if test="${empty sessionScope.username or empty sessionScope.role}">
+	<c:redirect url="login.jsp" />
+</c:if>
 
-    <h2>訂單管理</h2>
+<div class="container mt-5">
 
-    <p>
-        使用者：${sessionScope.username}（
-        <c:choose>
-            <c:when test="${sessionScope.role == 'buyer'}">買家</c:when>
-            <c:when test="${sessionScope.role == 'seller'}">賣家</c:when>
-            <c:otherwise>⚠ 無效角色</c:otherwise>
-        </c:choose>
-        ）
-    </p>
+	<div>訂單管理</div>
 
-    <!-- ✅ 沒有訂單時的顯示 -->
-    <c:if test="${empty orders}">
-        <p>尚無訂單。</p>
-    </c:if>
+	<div>
+		使用者：${sessionScope.username}（
+		<c:choose>
+			<c:when test="${sessionScope.role == 'buyer'}">買家</c:when>
+			<c:when test="${sessionScope.role == 'seller'}">賣家</c:when>
+			<c:otherwise>⚠ 無效角色</c:otherwise>
+		</c:choose>
+		）
+	</div>
 
-    <!-- ✅ 有訂單時的表格顯示 -->
-    <c:if test="${not empty orders}">
-        <table border="1">
-            <thead>
-                <tr>
-                    <th>訂單編號</th>
-                    <c:choose>
-                        <c:when test="${sessionScope.role == 'buyer'}">
-                            <th>總金額</th>
-                        </c:when>
-                        <c:when test="${sessionScope.role == 'seller'}">
-                            <th>買家名稱</th>
-                            <th>總金額</th>
-                        </c:when>
-                    </c:choose>
-                    <th>狀態</th>
-                    <th>下單時間</th>
-                    <th>操作</th>
-                    <th>明細</th>
-                </tr>
-            </thead>
-            <tbody>
-                <c:forEach var="order" items="${orders}">
-                    <tr>
-                        <td>${order.id}</td>
+	<!-- ✅ 沒有訂單時的顯示 -->
+	<c:if test="${empty orders}">
+		<p>尚無訂單。</p>
+	</c:if>
 
-                        <!-- ✅ 根據角色顯示不同欄位 -->
-                        <c:choose>
-                            <c:when test="${sessionScope.role == 'buyer'}">
-                                <td>${order.totalAmount}</td>
-                            </c:when>
-                            <c:when test="${sessionScope.role == 'seller'}">
-                                <td>${order.buyerName}</td>
-                                <td>${order.totalAmount}</td>
-                            </c:when>
-                        </c:choose>
+	<!-- ✅ 有訂單時的 Grid 顯示 -->
+	<c:if test="${not empty orders}">
+		<div class="order-section">
+			<!-- 表頭 -->
+			<div class="grid-container grid-header"
+				style="grid-template-columns: repeat(6, minmax(120px, 1fr));">
+				<div>訂單編號</div>
 
-                        <td>${order.status}</td>
-                        <td>${order.createdAt}</td>
+				<c:choose>
+					<c:when test="${sessionScope.role == 'buyer'}">
+						<div>總金額</div>
+					</c:when>
+					<c:when test="${sessionScope.role == 'seller'}">
+						<div>買家名稱</div>
+						<div>總金額</div>
+					</c:when>
+				</c:choose>
 
-                        <!-- ✅ 操作區：根據角色與狀態決定按鈕 -->
-                        <td>
-                            <c:choose>
-                                <c:when test="${sessionScope.role == 'buyer' && order.status == 'pending'}">
-                                    <form action="OrderUpdateController" method="post" style="display:inline;">
-                                        <input type="hidden" name="orderId" value="${order.id}">
-                                        <input type="hidden" name="action" value="cancel">
-                                        <input type="submit" value="取消訂單">
-                                    </form>
-                                </c:when>
-                                <c:when test="${sessionScope.role == 'seller' && order.status == 'pending'}">
-                                    <form action="OrderUpdateController" method="post" style="display:inline;">
-                                        <input type="hidden" name="orderId" value="${order.id}">
-                                        <input type="hidden" name="action" value="ship">
-                                        <input type="submit" value="出貨">
-                                    </form>
-                                </c:when>
-                                <c:when test="${sessionScope.role == 'buyer' && order.status == 'shipped'}">
-                                    <form action="OrderUpdateController" method="post" style="display:inline;">
-                                        <input type="hidden" name="orderId" value="${order.id}">
-                                        <input type="hidden" name="action" value="complete">
-                                        <input type="submit" value="確認完成">
-                                    </form>
-                                </c:when>
-                            </c:choose>
-                        </td>
+				<div>狀態</div>
+				<div>下單時間</div>
+				<div>操作</div>
+				<div>明細</div>
+			</div>
 
-                        <!-- ✅ 查看訂單明細按鈕 -->
-                        <td>
-                            <form action="OrderDetailController" method="get" style="display:inline;">
-                                <input type="hidden" name="orderId" value="${order.id}">
-                                <input type="submit" value="查看明細">
-                            </form>
-                        </td>
-                    </tr>
-                </c:forEach>
-            </tbody>
-        </table>
-    </c:if>
+			<!-- 資料列 -->
+			<c:forEach var="order" items="${orders}">
+				<div class="grid-container"
+					style="grid-template-columns: repeat(6, minmax(120px, 1fr));">
+					<div>${order.id}</div>
+
+					<c:choose>
+						<c:when test="${sessionScope.role == 'buyer'}">
+							<div>${order.totalAmount}</div>
+						</c:when>
+						<c:when test="${sessionScope.role == 'seller'}">
+							<div>${order.buyerName}</div>
+							<div>${order.totalAmount}</div>
+						</c:when>
+					</c:choose>
+
+					<div>${order.status}</div>
+					<div>${order.createdAt}</div>
+
+					<!-- 操作按鈕 -->
+					<form action="OrderUpdateController" method="post"
+						style="display: inline;">
+						<div class="btn">
+							<c:choose>
+								<c:when
+									test="${sessionScope.role == 'buyer' && order.status == 'pending'}">
+									<input type="hidden" name="orderId" value="${order.id}">
+									<input type="hidden" name="action" value="cancel">
+									<input type="submit" value="取消訂單">
+								</c:when>
+								<c:when
+									test="${sessionScope.role == 'seller' && order.status == 'pending'}">
+									<input type="hidden" name="orderId" value="${order.id}">
+									<input type="hidden" name="action" value="ship">
+									<input type="submit" value="出貨">
+
+								</c:when>
+								<c:when
+									test="${sessionScope.role == 'buyer' && order.status == 'shipped'}">
+									<input type="hidden" name="orderId" value="${order.id}">
+									<input type="hidden" name="action" value="complete">
+									<input type="submit" value="確認完成">
+								</c:when>
+							</c:choose>
+						</div>
+					</form>
+
+					<!-- 查看明細 -->
+					<div class="btn">
+						<form action="OrderDetailController" method="get"
+							style="display: inline;">
+							<input type="hidden" name="orderId" value="${order.id}">
+							<input type="submit" value="查看明細">
+						</form>
+					</div>
+				</div>
+			</c:forEach>
+		</div>
+	</c:if>
+
+</div>
 <%@ include file="/templates/footer.jsp"%>

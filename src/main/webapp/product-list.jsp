@@ -32,8 +32,9 @@ request.setAttribute("pageTitle", "首頁");
 </div>
 <!-- ***** Main Banner Area End ***** -->
 
-
+<div class="container mt-5">
 <!-- ***** Products Area Starts ***** -->
+
 <c:if test="${action=='show'}">
 	<section class="section" id="products">
 		<div class="container">
@@ -46,18 +47,10 @@ request.setAttribute("pageTitle", "首頁");
 				</div>
 			</div>
 		</div>
-		<div class="container grid-row">
+		<div class="grid-container grid-row" style="grid-template-columns: repeat(3, 1fr)" >
 			<c:forEach var="product" items="${showProducts}">
 				<div class="item">
 					<div class="thumb">
-						<!-- <div class="hover-content">
-						<ul>
-							<li><a href="single-product.html"><i class="fa fa-eye"></i></a></li>
-							<li><a href="single-product.html"><i class="fa fa-star"></i></a></li>
-							<li><a href="single-product.html"><i
-									class="fa fa-shopping-cart"></i></a></li>
-						</ul>
-					</div> -->
 						<a href="ProductController?action=detail&productId=${product.id}">
 							<img src="assets/images/men-01.jpg" alt="${product.name}">
 						</a>
@@ -65,13 +58,6 @@ request.setAttribute("pageTitle", "首頁");
 					<div class="down-content">
 						<h4>${product.name}</h4>
 						<span>${product.price}</span>
-						<!-- <ul class="stars">
-						<li><i class="fa fa-star"></i></li>
-						<li><i class="fa fa-star"></i></li>
-						<li><i class="fa fa-star"></i></li>
-						<li><i class="fa fa-star"></i></li>
-						<li><i class="fa fa-star"></i></li>
-					</ul> -->
 					</div>
 				</div>
 
@@ -81,10 +67,9 @@ request.setAttribute("pageTitle", "首頁");
 </c:if>
 
 <c:if test="${action=='showForSeller'}">
-	<h2>商品列表</h2>
-	<a href="ProductController?action=modify"><button>新增商品</button></a>
+	<div class="btn"><a href="ProductController?action=modify">新增商品</a></div>
 	<div
-		class="grid-header ${action == 'showForSeller' ? 'grid-ForSeller' : 'grid-all'}">
+		class="grid-container grid-header"  style="grid-template-columns: repeat(6, 1fr);">
 		<div>商品名稱</div>
 		<div>描述</div>
 		<div>分類ID</div>
@@ -95,7 +80,7 @@ request.setAttribute("pageTitle", "首頁");
 
 	<c:forEach var="product" items="${showProducts}">
 		<div
-			class="grid-row ${action == 'showForSeller' ? 'grid-ForSeller' : 'grid-all'}">
+			class="grid-container"  style="grid-template-columns: repeat(6, 1fr);">
 			<div>${product.name}</div>
 			<div>${product.description}</div>
 			<div>${product.categoryId}</div>
@@ -103,28 +88,16 @@ request.setAttribute("pageTitle", "首頁");
 			<div>${product.stock}</div>
 			<c:if test="${action=='showForSeller'}">
 				<div>
-					<a href="ProductController?action=modify&productId=${product.id}"><button>編輯</button></a>
-					<a href="ProductController?action=delete&productId=${product.id}"><button>刪除</button></a>
+					<div class="btn"><a href="ProductController?action=modify&productId=${product.id}">編輯</a></div>
+					<div class="btn"><a href="ProductController?action=delete&productId=${product.id}">刪除</a></div>
 				</div>
 			</c:if>
-			<!--<c:if test="${action=='show'}">
-                            <div>
-                                <form action="CartItemController" method="post">
-                                    <input type="hidden" name="productId" value="${product.id}" /> <label
-                                        for="quantity">購買數量：</label> <input type="number" id="quantity" name="quantity"
-                                        min="1" value="${item.quantity}" required />
-                                    <button type="submit">加入購物車</button>
-                                    </a>
-                                </form>
-                            </div>
-                        </c:if>-->
 		</div>
 	</c:forEach>
 </c:if>
 
 
 <c:if test="${action == 'modify'}">
-	<h2>${product.id != null ? '修改商品' : '新增商品'}</h2>
 
 	<form action="ProductController" method="post">
 		<input type="hidden" name="action"
@@ -153,7 +126,7 @@ request.setAttribute("pageTitle", "首頁");
 			</select>
 
 
-			<div class="form-actions">
+			<div class="btn form-actions">
 				<input type="submit" value="${product.id != null ? '更新商品' : '新增商品'}" />
 			</div>
 		</div>
@@ -161,5 +134,6 @@ request.setAttribute("pageTitle", "首頁");
 
 </c:if>
 <!-- ***** Products Area Ends ***** -->
+</div>
 
 <%@ include file="/templates/footer.jsp"%>

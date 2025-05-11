@@ -1,87 +1,65 @@
-<%@ page contentType="text/html; charset=UTF-8" session="true" %>
-<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ page contentType="text/html; charset=UTF-8" session="true"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core"%>
+
+<%
+request.setAttribute("pageTitle", "分類管理");
+%>
 <%@ include file="/templates/header.jsp"%>
-<!DOCTYPE html>
-<html lang="zh-Hant">
-<head>
-    <meta charset="UTF-8">
-    <title>分類管理</title>
-    <style>
-        table { border-collapse: collapse; width: 80%; margin-bottom: 20px; }
-        th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
-        form.inline { display: inline; margin: 0 5px; }
-        .error { color: red; }
-        .success { color: green; }
-    </style>
-</head>
-<body>
 
-<h2>分類管理</h2>
+<div class="container mt-5">
 
-<!-- ✅ 新增分類表單 -->
-<h3>新增分類</h3>
-<form action="CategoryController" method="post">
-    <input type="hidden" name="action" value="add" />
-    <input type="text" name="name" placeholder="分類名稱" required />
-    <input type="text" name="description" placeholder="描述" />
-    <button type="submit">新增</button>
-</form>
+	<!-- ✅ 新增分類表單 -->
+	<div class="header">新增分類</div>
+	<form action="CategoryController" method="post">
+		<input type="hidden" name="action" value="add" /> <input type="text"
+			name="name" placeholder="分類名稱" required /> <input type="text"
+			name="description" placeholder="描述" />
+		<button type="submit">新增</button>
+	</form>
 
-<hr/>
+	<hr />
 
-<!-- ✅ 顯示分類列表 -->
-<h3>分類清單</h3>
-<table>
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>名稱</th>
-            <th>描述</th>
-            <th>操作</th>
-        </tr>
-    </thead>
-    <tbody>
-        <c:forEach var="category" items="${categories}">
-            <tr>
-                <td>${category.id}</td>
-                <td>${category.name}</td>
-                <td>${category.description}</td>
-                <td>
-                    <!-- ✅ 修改分類 -->
-                    <form class="inline" action="CategoryController" method="post">
-                        <input type="hidden" name="action" value="update" />
-                        <input type="hidden" name="id" value="${category.id}" />
-                        <input type="text" name="name" value="${category.name}" required />
-                        <input type="text" name="description" value="${category.description}" />
-                        <button type="submit">修改</button>
-                    </form>
+	<!-- ✅ 顯示分類列表 -->
+	<div class="category-grid header">
+		<div>ID</div>
+		<div>名稱</div>
+		<div>描述</div>
+		<div>操作</div>
+	</div>
 
-                    <!-- ✅ 刪除分類 -->
-                    <form class="inline" action="CategoryController" method="post"
-                          onsubmit="return confirm('確定要刪除這個分類嗎？');">
-                        <input type="hidden" name="action" value="delete" />
-                        <input type="hidden" name="id" value="${category.id}" />
-                        <button type="submit">刪除</button>
-                    </form>
-                </td>
-            </tr>
-        </c:forEach>
-    </tbody>
-</table>
+	<c:forEach var="category" items="${categories}">
+		<form action="CategoryController" method="post">
+		<input type="hidden" name="action" value="update" /> <input
+						type="hidden" name="id" value="${category.id}" />
+			<div class="category-grid">
+				<div>${category.id}</div>
+				<div>
+					<input type="text" name="name" value="${category.name}" required />
+				</div>
+				<div>
+					<textarea name="description">${category.description}</textarea>
+				</div>
+				<div>
+					
+					<button type="submit">修改</button>
+					<button type="submit" name="action" value="delete"
+						onclick="return confirm('確定要刪除這個分類嗎？');">刪除</button>
+				</div>
+			</div>
+		</form>
+	</c:forEach>
+</div>
 
-<!-- ✅ 返回首頁連結 -->
-<p>
-    <a href="index.jsp">← 回首頁</a>
-</p>
 
 <!-- ✅ 顯示錯誤或成功訊息 -->
 <c:if test="${not empty error}">
-    <p class="error">${error}</p>
+	<p class="error">${error}</p>
 </c:if>
 
 <c:if test="${not empty message}">
-    <p class="success">${message}</p>
+	<p class="success">${message}</p>
 </c:if>
 
-</body>
-</html>
+</div>
+
+<%@ include file="/templates/footer.jsp"%>

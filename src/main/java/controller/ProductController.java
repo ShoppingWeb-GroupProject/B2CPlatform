@@ -31,6 +31,11 @@ public class ProductController extends HttpServlet {
 		// 先確認 action 是否為 null 避免 NullPointerException
 		String action = request.getParameter("action");
 		String productId = request.getParameter("productId");
+		
+		// 查詢分類列表
+	    CategoryDAO categoryDAO = new CategoryDAO();
+	    List<model.Category> categories = categoryDAO.findAllCategories();
+	    
 
 		if (action == null) {
 			response.sendRedirect("index.jsp");
@@ -41,13 +46,10 @@ public class ProductController extends HttpServlet {
 			// 確保 subject 為 "show" 時才抓取資料
 			List<Product> showProducts = ProductService.getAllProducts();
 			request.setAttribute("showProducts", showProducts);
-			request.setAttribute("action", "show");
-
+			
 		} else if (action.equals("showForSeller")) {
-			// 確保 subject 為 "show" 時才抓取資料
 			List<Product> showProducts = ProductService.getSellerProducts(username);
 			request.setAttribute("showProducts", showProducts);
-			request.setAttribute("action", "show");
 
 		} else if (action.equals("modify")) {
 		    int theProductId = productId != null ? Integer.parseInt(productId) : -1;
@@ -57,10 +59,7 @@ public class ProductController extends HttpServlet {
 		    }
 
 		    // 查詢分類列表
-		    CategoryDAO categoryDAO = new CategoryDAO();
-		    List<model.Category> categories = categoryDAO.findAllCategories();
 		    request.setAttribute("categories", categories);
-
 		    request.setAttribute("action", "modify");
 		    request.getRequestDispatcher("product-list.jsp").forward(request, response);
 		    return;
@@ -74,9 +73,11 @@ public class ProductController extends HttpServlet {
 		} else if (action.equals("detail")) {
 			int theProductId = Integer.parseInt(productId);
 		    Product product = ProductService.getProductById(theProductId);
+		    request.setAttribute("categories", categories);
 		    request.setAttribute("product", product);
 		    request.setAttribute("action", "show");
 		    request.getRequestDispatcher("product-detail.jsp").forward(request, response);
+			return;
 		}
 
 		// 將資料傳遞到 JSP 頁面
