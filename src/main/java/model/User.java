@@ -10,12 +10,14 @@ public class User {
     private String phone;  
     private String address; 
     private double discount;
+    private String lineId;
 
     // === Getter & Setter ===
+    
+    public String getLineId() { return lineId; }
+    public void setLineId(String lineId) { this.lineId = lineId; }
 
-    public double getDiscount() {
-        return discount;
-    }
+    public double getDiscount() { return discount; }
 
     public void setDiscount(double discount) {
         this.discount = discount;

@@ -14,6 +14,31 @@ import java.util.List;
  *   - 處理訂單資料庫操作，包括新增、查詢、更新
  */
 public class OrderDAO {
+	
+	public Order findOrderById(int orderId) {
+	    String sql = "SELECT * FROM orders WHERE id = ?";
+	    try (Connection conn = DBUtil.getConnection();
+	         PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+	        stmt.setInt(1, orderId);
+	        ResultSet rs = stmt.executeQuery();
+	        if (rs.next()) {
+	            Order order = new Order();
+	            order.setId(rs.getInt("id"));
+	            order.setUserId(rs.getInt("user_id"));
+	            order.setTotalAmount(rs.getDouble("total_amount"));
+	            order.setAddress(rs.getString("address"));
+	            order.setStatus(rs.getString("status"));
+	            order.setCreatedAt(rs.getString("created_at"));
+	            return order;
+	        }
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    return null;
+	}
+
 
     /**
      * 建立新訂單（含訂單項目）

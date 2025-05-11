@@ -13,7 +13,7 @@ public class UserDAO {
      * 新增使用者
      */
     public boolean addUser(User user) {
-        String sql = "INSERT INTO users (username, password, email, role, phone, address, is_blacklisted, discount) " +
+        String sql = "INSERT INTO users (username, password, email, role, phone, address, is_blacklisted, discount, line_id) " +
                      "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = DBUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -26,7 +26,7 @@ public class UserDAO {
             stmt.setString(6, user.getAddress());
             stmt.setBoolean(7, user.isBlacklisted());
             stmt.setDouble(8, user.getDiscount());
-
+            stmt.setString(9, user.getLineId());
             return stmt.executeUpdate() > 0;
 
         } catch (SQLException e) {
@@ -245,6 +245,20 @@ public class UserDAO {
             return false;
         }
     }
+    
+    public boolean updateLineId(int userId, String lineId) {
+        String sql = "UPDATE users SET line_id = ? WHERE id = ?";
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, lineId);
+            stmt.setInt(2, userId);
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 
     /**
      * 工具：將 ResultSet 封裝為 User 物件
@@ -260,6 +274,7 @@ public class UserDAO {
         user.setDiscount(rs.getDouble("discount"));
         user.setPhone(rs.getString("phone"));
         user.setAddress(rs.getString("address"));
+        user.setLineId(rs.getString("line_id"));
         return user;
     }
 }
