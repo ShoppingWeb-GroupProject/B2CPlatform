@@ -1,47 +1,45 @@
-<%@ page contentType="text/html; charset=UTF-8" session="true" %>
-<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ page contentType="text/html; charset=UTF-8" session="true"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core"%>
 <!DOCTYPE html>
-<html lang="zh-Hant">
-<head>
-    <meta charset="UTF-8">
-    <title>訂單明細</title>
-</head>
-<body>
+<%
+request.setAttribute("pageTitle", "訂單明細");
+%>
+<%@ include file="/templates/header.jsp"%>
 
-    <h2>訂單明細 - 訂單編號 ${orderId}</h2>
+<div class="container mt-5">
+	<div>訂單編號 ${orderId}</div>
 
-    <!-- ✅ 如果沒有找到訂單明細 -->
-    <c:if test="${empty orderItems}">
-        <p>查無此訂單明細！</p>
-    </c:if>
+	<!-- ✅ 如果沒有找到訂單明細 -->
+	<c:if test="${empty orderItems}">
+		<p>查無此訂單明細！</p>
+	</c:if>
 
-    <!-- ✅ 如果有訂單明細 -->
-    <c:if test="${not empty orderItems}">
-        <table border="1">
-            <thead>
-                <tr>
-                    <th>商品名稱</th>
-                    <th>單價</th>
-                    <th>數量</th>
-                    <th>小計</th>
-                </tr>
-            </thead>
-            <tbody>
-                <c:forEach var="item" items="${orderItems}">
-                    <tr>
-                        <td>${item.productName}</td>
-                        <td>${item.price}</td>
-                        <td>${item.quantity}</td>
-                        <td>${item.price * item.quantity}</td>
-                    </tr>
-                </c:forEach>
-            </tbody>
-        </table>
-    </c:if>
+	<!-- ✅ 如果有訂單明細 -->
+	<c:if test="${not empty orderItems}">
+		<div class="grid-container grid-header"
+			style="grid-template-columns: repeat(4, minmax(120px, 1fr));">
+			<!-- 表頭 -->
+			<div>商品名稱</div>
+			<div>單價</div>
+			<div>數量</div>
+			<div>小計</div>
+		</div>
+		<!-- 資料列 -->
+		<c:forEach var="item" items="${orderItems}">
+			<div class="grid-container"
+				style="grid-template-columns: repeat(4, minmax(120px, 1fr));">
+				<div>${item.productName}</div>
+				<div>${item.price}</div>
+				<div>${item.quantity}</div>
+				<div>${item.price * item.quantity}</div>
+			</div>
+		</c:forEach>
 
-    <br>
-    <!-- ✅ 返回訂單列表 -->
-    <a href="OrderController">回訂單列表</a>
+	</c:if>
 
-</body>
-</html>
+	<br>
+	<!-- ✅ 返回訂單列表 -->
+	<div class="btn"><a href="OrderController">回訂單列表</a></div>
+</div>
+
+<%@ include file="/templates/footer.jsp"%>
