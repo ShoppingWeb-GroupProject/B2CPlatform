@@ -39,7 +39,8 @@ public class DBUtil {
                 address VARCHAR(255),
                 role VARCHAR(20) DEFAULT 'buyer',
                 is_blacklisted TINYINT(1) DEFAULT 0,
-                discount DOUBLE DEFAULT 1.0
+                discount DOUBLE DEFAULT 1.0,
+                line_id VARCHAR(100);
             );
             """,
 

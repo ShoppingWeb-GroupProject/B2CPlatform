@@ -22,68 +22,70 @@ public class ProductController extends HttpServlet {
 //	private ProductService productService = new ProductService();
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	        throws ServletException, IOException {
 
-		HttpSession session = request.getSession(false);
-		String username = (String) session.getAttribute("username");
-		String role = (String) session.getAttribute("role");
+	    HttpSession session = request.getSession(false);
+	    String username = (String) session.getAttribute("username");
+	    String role = (String) session.getAttribute("role");
 
-		// 先確認 action 是否為 null 避免 NullPointerException
-		String action = request.getParameter("action");
-		String productId = request.getParameter("productId");
+	    String action = request.getParameter("action");
+	    String productId = request.getParameter("productId");
 
-		if (action == null) {
-			response.sendRedirect("index.jsp");
-			return;
-		}
+	    if (action == null) {
+	        response.sendRedirect("index.jsp");
+	        return;
+	    }
 
-		if (action.equals("show")) {
-			// 確保 subject 為 "show" 時才抓取資料
-			List<Product> showProducts = ProductService.getAllProducts();
-			request.setAttribute("showProducts", showProducts);
-			request.setAttribute("action", "show");
+	    if (action.equals("show")) {
+	        // 取得所有商品
+	        List<Product> showProducts = ProductService.getAllProducts();
+	        request.setAttribute("showProducts", showProducts);
+	        request.setAttribute("action", "show");
 
-		} else if (action.equals("showForSeller")) {
-			// 確保 subject 為 "show" 時才抓取資料
-			List<Product> showProducts = ProductService.getSellerProducts(username);
-			request.setAttribute("showProducts", showProducts);
-			request.setAttribute("action", "show");
+	    } else if (action.equals("showForSeller")) {
+	        // 取得賣家上架的商品
+	        List<Product> showProducts = ProductService.getSellerProducts(username);
+	        request.setAttribute("showProducts", showProducts);
+	        request.setAttribute("action", "show");
 
-		} else if (action.equals("modify")) {
-		    int theProductId = productId != null ? Integer.parseInt(productId) : -1;
-		    if (theProductId != -1) {
-		        Product product = ProductService.getProductById(theProductId);
-		        request.setAttribute("product", product);
-		    }
+	    } else if (action.equals("modify")) {
+	        // 商品修改頁：讀取商品資料與分類清單
+	        int theProductId = productId != null ? Integer.parseInt(productId) : -1;
+	        if (theProductId != -1) {
+	            Product product = ProductService.getProductById(theProductId);
+	            request.setAttribute("product", product);
+	        }
 
-		    // 查詢分類列表
-		    CategoryDAO categoryDAO = new CategoryDAO();
-		    List<model.Category> categories = categoryDAO.findAllCategories();
-		    request.setAttribute("categories", categories);
+	        CategoryDAO categoryDAO = new CategoryDAO();
+	        List<model.Category> categories = categoryDAO.findAllCategories();
+	        request.setAttribute("categories", categories);
+	        request.setAttribute("action", "modify");
 
-		    request.setAttribute("action", "modify");
-		    request.getRequestDispatcher("product-list.jsp").forward(request, response);
-		    return;
+	        // ✅ 已 forward，結束執行
+	        request.getRequestDispatcher("product-list.jsp").forward(request, response);
+	        return;
 
-		} else if (action.equals("delete")) {
-			int theProductId = Integer.parseInt(productId);
-			ProductService.deleteProduct(theProductId);
-			// 重新導向顯示列表
-			response.sendRedirect("ProductController?action=showForSeller");
-			return;
-		} else if (action.equals("detail")) {
-			int theProductId = Integer.parseInt(productId);
-		    Product product = ProductService.getProductById(theProductId);
-		    request.setAttribute("product", product);
-		    request.setAttribute("action", "show");
-		    request.getRequestDispatcher("product-detail.jsp").forward(request, response);
-		}
+	    } else if (action.equals("delete")) {
+	        // 刪除商品後重新導向
+	        int theProductId = Integer.parseInt(productId);
+	        ProductService.deleteProduct(theProductId);
+	        response.sendRedirect("ProductController?action=showForSeller");
+	        return;
 
-		// 將資料傳遞到 JSP 頁面
-		request.setAttribute("action", action);
+	    } else if (action.equals("detail")) {
+	        // 商品詳情頁
+	        int theProductId = Integer.parseInt(productId);
+	        Product product = ProductService.getProductById(theProductId);
+	        request.setAttribute("product", product);
+	        request.setAttribute("action", "show");
 
-		// 轉發請求給 JSP 顯示
-		request.getRequestDispatcher("product-list.jsp").forward(request, response);
+	        // ✅ forward 完後 return，避免下方再次 forward
+	        request.getRequestDispatcher("product-detail.jsp").forward(request, response);
+	        return;
+	    }
+
+	    // 若為 show 或 showForSeller，統一轉發到列表頁
+	    request.getRequestDispatcher("product-list.jsp").forward(request, response);
 	}
 
 	@Override

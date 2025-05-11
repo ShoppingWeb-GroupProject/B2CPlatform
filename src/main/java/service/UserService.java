@@ -12,6 +12,11 @@ import java.util.List;
 public class UserService {
 
     private UserDAO userDAO = new UserDAO();
+    
+    public boolean updateLineId(int userId, String lineId) {
+        return userDAO.updateLineId(userId, lineId);
+    }
+
 
     /**
      * 使用者登入驗證
