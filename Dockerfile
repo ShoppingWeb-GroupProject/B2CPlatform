@@ -1,4 +1,4 @@
-FROM tomcat:10.1-jdk17-temporal
+FROM tomcat:10.1-jdk17
 
 COPY target/B2CPlatform.war /usr/local/tomcat/webapps/
 
