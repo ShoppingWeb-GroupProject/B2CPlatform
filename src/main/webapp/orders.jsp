@@ -12,7 +12,7 @@ request.setAttribute("pageTitle", "訂單管理");
 
 <div class="container mt-5">
 
-	<div>訂單管理</div>
+	<h2 style="margin-bottom:10px;">訂單管理</h2>
 
 	<div>
 		使用者：${sessionScope.username}（
