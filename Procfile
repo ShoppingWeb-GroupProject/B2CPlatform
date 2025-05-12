@@ -1,1 +1,1 @@
-web: java $JAVA_OPTS -jar target/webapp-runner.jar --port $PORT target/B2CPlatform.war
+web: java $JAVA_OPTS -jar webapp-runner.jar --port $PORT target/B2CPlatform.war
