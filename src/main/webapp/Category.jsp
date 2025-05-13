@@ -41,8 +41,8 @@ request.setAttribute("pageTitle", "分類管理");
 				</div>
 				<div>
 					
-					<button type="submit">修改</button>
-					<button type="submit" name="action" value="delete"
+					<button class="btn" type="submit">修改</button>
+					<button class="btn" type="submit" name="action" value="delete"
 						onclick="return confirm('確定要刪除這個分類嗎？');">刪除</button>
 				</div>
 			</div>

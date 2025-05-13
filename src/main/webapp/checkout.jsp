@@ -1,14 +1,9 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
-<!DOCTYPE html>
-<html lang="zh-Hant">
-<head>
-    <meta charset="UTF-8">
-    <title>結帳確認</title>
-</head>
-<body>
-
-    <h2>結帳確認</h2>
+<%
+request.setAttribute("pageTitle", "結帳確認");
+%>
+<%@ include file="/templates/header.jsp"%>
 
     <!-- ✅ 顯示購物車內容 -->
     <table border="1">
@@ -42,5 +37,4 @@
         <a href="index.jsp">回首頁</a>
     </p>
 
-</body>
-</html>
+<%@ include file="/templates/footer.jsp"%>

@@ -44,7 +44,7 @@ request.setAttribute("pageTitle", "購物車");
 								class="remove-form">
 								<input type="hidden" name="action" value="remove" /> <input
 									type="hidden" name="productId" value="${item.productId}" />
-								<button type="submit">移除</button>
+								<button class="btn" type="submit">移除</button>
 							</form>
 						</div>
 					</div>
@@ -58,7 +58,7 @@ request.setAttribute("pageTitle", "購物車");
 				<form action="OrderController" method="post">
 					<label for="address">收件地址：</label> <input type="text" id="address"
 						name="address" required />
-					<button type="submit">建立訂單</button>
+					<button class="btn" type="submit">建立訂單</button>
 				</form>
 			</c:otherwise>
 		</c:choose>
