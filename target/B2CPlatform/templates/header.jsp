@@ -97,9 +97,8 @@ https://templatemo.com/tm-571-hexashop
 								</c:if>
 								<c:if
 									test="${not empty sessionScope.role && sessionScope.role=='seller'}">
-									<li class="scroll-to-section"><a href="discountForm.jsp">折扣設定</a></li>
+									<!-- <li class="scroll-to-section"><a href="discountForm.jsp">折扣設定</a></li> -->
 									<li><a href="${productShowSeller}">我的商品</a></li>
-								</c:if>
 									<li class="submenu"><a href="javascript:;">管理功能</a>
 									<ul>
 										<li class="scroll-to-section"><a
@@ -107,7 +106,7 @@ https://templatemo.com/tm-571-hexashop
 										<li class="scroll-to-section"><a
 											href="CategoryController">商品分類設定</a></li>
 									</ul></li>
-								
+								</c:if>
 								<li class="scroll-to-section"><a href="LogoutController">登出</a></li>
 							</c:if>
 						</ul>
