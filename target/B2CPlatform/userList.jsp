@@ -1,7 +1,9 @@
 <%@ page contentType="text/html; charset=UTF-8" session="true"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%
+    request.setAttribute("pageTitle", "使用者");
+%>
 <%@ include file="/templates/header.jsp"%>
-
 <div class="container mt-5">
 
 	<div class="grid-container grid-header"
