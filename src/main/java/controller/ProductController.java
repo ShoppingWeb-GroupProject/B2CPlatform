@@ -31,27 +31,37 @@ public class ProductController extends HttpServlet {
         String idParam = request.getParameter("productId");
 
         if ("detail".equals(action)) {
+            // 🔍 商品詳情頁：必須帶有 productId
             if (idParam == null || idParam.isEmpty()) {
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "缺少 productId");
                 return;
             }
-            int productId = Integer.parseInt(idParam);
-            Product product = ProductService.getProductById(productId);
-            request.setAttribute("product", product);
-            request.getRequestDispatcher("productDetail.jsp").forward(request, response);
+            try {
+                int productId = Integer.parseInt(idParam);
+                Product product = ProductService.getProductById(productId);
+                request.setAttribute("product", product);
+                request.getRequestDispatcher("productDetail.jsp").forward(request, response);
+            } catch (NumberFormatException e) {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "無效的 productId");
+            }
 
         } else if ("modify".equals(action)) {
-            if (idParam == null || idParam.isEmpty()) {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "缺少 productId");
-                return;
+            // 🛠 新增或編輯商品頁：可有 productId（編輯）或無（新增）
+            Product product = new Product(); // 預設空白（新增用）
+            if (idParam != null && !idParam.isEmpty()) {
+                try {
+                    int productId = Integer.parseInt(idParam);
+                    product = ProductService.getProductById(productId); // 若有帶 ID 就讀資料
+                } catch (NumberFormatException e) {
+                    // 若格式錯誤，忽略 → 留空 product 進表單即可
+                }
             }
-            int productId = Integer.parseInt(idParam);
-            Product product = ProductService.getProductById(productId);
             request.setAttribute("product", product);
             request.setAttribute("action", "modify");
             request.getRequestDispatcher("product-list.jsp").forward(request, response);
 
         } else if ("showForSeller".equals(action)) {
+            // 👨‍💼 賣家商品列表
             HttpSession session = request.getSession(false);
             String username = (String) session.getAttribute("username");
             List<Product> products = ProductService.getSellerProducts(username);
@@ -60,6 +70,7 @@ public class ProductController extends HttpServlet {
             request.getRequestDispatcher("product-list.jsp").forward(request, response);
 
         } else {
+            // 🛒 顯示所有商品（買家）
             List<Product> products = ProductService.getAllProducts();
             request.setAttribute("showProducts", products);
             request.setAttribute("action", "show");
