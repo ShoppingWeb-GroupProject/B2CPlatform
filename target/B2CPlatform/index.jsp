@@ -8,7 +8,7 @@
 
 <div class="container mt-5">
 	<h2>熱銷商品</h2>
-	<p>目前是靜態測試區。</p>
+	<a href="https://line.me/R/ti/p/@375uqvrnhttps://line.me/R/ti/p/@375uqvrn" >加入官方帳號，追蹤您的包裹</a>
 </div>
 
 <%@ include file="/templates/footer.jsp"%>
