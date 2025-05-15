@@ -96,49 +96,49 @@ request.setAttribute("pageTitle", "首頁");
 	</c:forEach>
 </c:if>
 
-
 <c:if test="${action == 'modify'}">
+    <form action="ProductController" method="post" enctype="multipart/form-data"> <!-- 🟡 加上 enctype -->
+        <input type="hidden" name="action" value="${product.id != null ? 'update' : 'add'}" />
+        <c:if test="${product.id != null}">
+            <input type="hidden" name="id" value="${product.id}" />
+        </c:if>
 
-	<form action="ProductController" method="post" enctype="multipart/form-data">
-		<input type="hidden" name="action"
-			value="${product.id != null ? 'update' : 'add'}" />
-		<c:if test="${product.id != null}">
-			<input type="hidden" name="id" value="${product.id}" />
-		</c:if>
+        <div class="form-grid">
+            <label for="name">商品名稱：</label>
+            <input type="text" id="name" name="name" value="${product.name}" required />
 
-		<div class="form-grid">
-			<label for="name">商品名稱：</label>
-			<input type="text" id="name" name="name" value="${product.name}" required />
+            <label for="price">價格：</label>
+            <input type="number" id="price" name="price" step="0.01" value="${product.price}" required />
 
-			<label for="price">價格：</label>
-			<input type="number" id="price" name="price" step="0.01" value="${product.price}" required />
+            <label for="stock">庫存：</label>
+            <input type="number" id="stock" name="stock" value="${product.stock}" required />
 
-			<label for="stock">庫存：</label>
-			<input type="number" id="stock" name="stock" value="${product.stock}" required />
+            <label for="description">商品描述：</label>
+            <textarea id="description" name="description" rows="4">${product.description}</textarea>
 
-			<label for="description">商品描述：</label>
-			<textarea id="description" name="description" rows="4">${product.description}</textarea>
+            <label for="categoryId">分類：</label>
+            <select id="categoryId" name="categoryId" required>
+                <c:forEach var="category" items="${categories}">
+                    <option value="${category.id}" ${product.categoryId == category.id ? 'selected' : ''}>
+                        ${category.name}
+                    </option>
+                </c:forEach>
+            </select>
 
-			<label for="categoryId">分類：</label>
-			<select id="categoryId" name="categoryId" required>
-			    <c:forEach var="category" items="${categories}">
-			        <option value="${category.id}"
-			            ${product.categoryId == category.id ? 'selected' : ''}>
-			            ${category.name}
-			        </option>
-			    </c:forEach>
-			</select>
+            <!-- 🖼️ 圖片上傳 -->
+            <label for="imageFile">商品圖片：</label>
+            <input type="file" id="imageFile" name="imageFile" accept="image/*" />
 
-			<!-- 🔽 新增圖片上傳欄位 -->
-			<label for="image">商品圖片：</label>
-			<input type="file" id="image" name="image" accept="image/*" ${product.id == null ? "required" : ""} />
+            <!-- 🔍 若已有圖片，顯示預覽 -->
+            <c:if test="${product.imageUrl != null}">
+                <img src="${product.imageUrl}" alt="商品圖片" style="max-height: 100px;" />
+            </c:if>
 
-			<div class="btn form-actions">
-				<input type="submit" value="${product.id != null ? '更新商品' : '新增商品'}" />
-			</div>
-		</div>
-	</form>
-
+            <div class="btn form-actions">
+                <input type="submit" value="${product.id != null ? '更新商品' : '新增商品'}" />
+            </div>
+        </div>
+    </form>
 </c:if>
 
 <!-- ***** Products Area Ends ***** -->

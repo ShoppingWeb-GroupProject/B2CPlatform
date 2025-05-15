@@ -28,8 +28,8 @@ public class ProductDAO {
 
         return products;
     }
-    
- // 🔧 更新商品主圖（image_url）
+
+    // 🔧 更新商品主圖（image_url）
     public boolean updateImageUrl(int productId, String imageUrl) {
         String sql = "UPDATE products SET image_url = ? WHERE id = ?";
         try (Connection conn = DBUtil.getConnection();
@@ -42,7 +42,6 @@ public class ProductDAO {
             return false;
         }
     }
-
 
     // 依賣家 ID 查詢商品
     public List<Product> getBySellerId(int sellerId) {
@@ -92,17 +91,28 @@ public class ProductDAO {
         try (Connection conn = DBUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
+            // 🔍 印出要寫入的商品資料
+            System.out.println("🚀 [insert] 寫入商品：");
+            System.out.println("  sellerId: " + product.getSellerId());
+            System.out.println("  name: " + product.getName());
+            System.out.println("  price: " + product.getPrice());
+            System.out.println("  stock: " + product.getStock());
+            System.out.println("  imageUrl: " + product.getImageUrl());
+
             stmt.setInt(1, product.getSellerId());
             stmt.setString(2, product.getName());
             stmt.setString(3, product.getDescription());
             stmt.setInt(4, product.getCategoryId());
             stmt.setDouble(5, product.getPrice());
             stmt.setInt(6, product.getStock());
-            stmt.setString(7, product.getImageUrl()); // 🔽 新增 image_url 欄位
+            stmt.setString(7, product.getImageUrl());
 
-            return stmt.executeUpdate() > 0;
+            int result = stmt.executeUpdate();
+            System.out.println("✅ [insert] 寫入結果：" + result);
+            return result > 0;
 
         } catch (Exception e) {
+            System.out.println("❌ [insert] 發生例外");
             e.printStackTrace();
             return false;
         }
@@ -120,7 +130,7 @@ public class ProductDAO {
             stmt.setInt(3, product.getCategoryId());
             stmt.setDouble(4, product.getPrice());
             stmt.setInt(5, product.getStock());
-            stmt.setString(6, product.getImageUrl()); // 🔽 更新 image_url 欄位
+            stmt.setString(6, product.getImageUrl());
             stmt.setInt(7, product.getId());
 
             return stmt.executeUpdate() > 0;
@@ -157,7 +167,7 @@ public class ProductDAO {
         product.setCategoryId(rs.getInt("category_id"));
         product.setPrice(rs.getDouble("price"));
         product.setStock(rs.getInt("stock"));
-        product.setImageUrl(rs.getString("image_url")); // 🔽 加入 imageUrl 欄位
+        product.setImageUrl(rs.getString("image_url"));
         return product;
     }
 

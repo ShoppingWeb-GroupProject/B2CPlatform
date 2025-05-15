@@ -29,9 +29,9 @@ request.setAttribute("pageTitle", "商品詳細資訊");
 
 			<c:if test="${action == 'show'}">
 				<form action="CartItemController" method="post">
-					<input type="hidden" name="productId" value="${product.id}" /> <label
-						for="quantity">購買數量：</label> <input type="number" id="quantity"
-						name="quantity" min="1" max="${product.stock}" value="1" required />
+					<input type="hidden" name="productId" value="${product.id}" /> 
+					<label for="quantity">
+					購買數量：</label> <input type="number" id="quantity" name="quantity" min="1" max="${product.stock}" value="1" required />
 					<button type="submit">加入購物車</button>
 				</form>
 			</c:if>

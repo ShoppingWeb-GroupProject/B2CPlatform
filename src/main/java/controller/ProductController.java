@@ -1,12 +1,8 @@
 package controller;
 
-import com.cloudinary.Cloudinary;
-import com.cloudinary.utils.ObjectUtils;
-
-import dao.CategoryDAO;
-import dao.UserDAO;
 import model.Product;
 import service.ProductService;
+import util.UploadUtil;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
@@ -14,144 +10,153 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
-import java.util.Locale.Category;
-import java.util.Map;
 
-@SuppressWarnings("serial")
+import dao.CategoryDAO;
+
+@SuppressWarnings({ "serial", "unused" })
 @WebServlet("/ProductController")
-@MultipartConfig
+@MultipartConfig // 🟡 確保支援 multipart/form-data
 public class ProductController extends HttpServlet {
+//	private ProductService productService = new ProductService();
 
-    private ProductService productService = new ProductService();
+	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+	        throws ServletException, IOException {
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+	    HttpSession session = request.getSession(false);
+	    String username = (String) session.getAttribute("username");
+	    String role = (String) session.getAttribute("role");
+		// 先確認 action 是否為 null 避免 NullPointerException
+		String action = request.getParameter("action");
+		String productId = request.getParameter("productId");
 
-        String action = request.getParameter("action");
-        String idParam = request.getParameter("productId");
+		// 查詢分類列表
+	    CategoryDAO categoryDAO = new CategoryDAO();
+	    List<model.Category> categories = categoryDAO.findAllCategories();
 
-        if ("detail".equals(action)) {
-            // 🔍 商品詳情頁：必須帶有 productId
-            if (idParam == null || idParam.isEmpty()) {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "缺少 productId");
-                return;
-            }
-            try {
-                int productId = Integer.parseInt(idParam);
-                Product product = ProductService.getProductById(productId);
-                request.setAttribute("product", product);
-                request.getRequestDispatcher("productDetail.jsp").forward(request, response);
-            } catch (NumberFormatException e) {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "無效的 productId");
-            }
 
-        } else if ("modify".equals(action)) {
-            // 🛠 新增或編輯商品頁：可有 productId（編輯）或無（新增）
-            Product product = new Product(); // 預設空白（新增用）
-            if (idParam != null && !idParam.isEmpty()) {
-                try {
-                    int productId = Integer.parseInt(idParam);
-                    product = ProductService.getProductById(productId); // 若有帶 ID 就讀資料
-                } catch (NumberFormatException e) {
-                    // 若格式錯誤，忽略 → 留空 product 進表單即可
-                }
-            }
-            List<model.Category> categories = new CategoryDAO().findAllCategories();
-            request.setAttribute("categories", categories);
-            request.setAttribute("product", product);
-            request.setAttribute("action", "modify");
-            request.getRequestDispatcher("product-list.jsp").forward(request, response);
 
-        } else if ("showForSeller".equals(action)) {
-            // 👨‍💼 賣家商品列表
-            HttpSession session = request.getSession(false);
-            String username = (String) session.getAttribute("username");
-            List<Product> products = ProductService.getSellerProducts(username);
-            request.setAttribute("showProducts", products);
-            request.setAttribute("action", "showForSeller");
-            request.getRequestDispatcher("product-list.jsp").forward(request, response);
+	    if (action == null) {
+	        response.sendRedirect("index.jsp");
+	        return;
+	    }
 
-        } else {
-            // 🛒 顯示所有商品（買家）
-            List<Product> products = ProductService.getAllProducts();
-            request.setAttribute("showProducts", products);
-            request.setAttribute("action", "show");
-            request.getRequestDispatcher("product-list.jsp").forward(request, response);
-        }
-    }
+	    if (action.equals("show")) {
+	        // 取得所有商品
+	        List<Product> showProducts = ProductService.getAllProducts();
+	        request.setAttribute("showProducts", showProducts);
+	        request.setAttribute("action", "show");
 
+	    } else if (action.equals("showForSeller")) {
+	        // 取得賣家上架的商品
+	        List<Product> showProducts = ProductService.getSellerProducts(username);
+	        request.setAttribute("showProducts", showProducts);
+	        request.setAttribute("action", "showForSeller");
+
+	    } else if (action.equals("modify")) {
+	        // 商品修改頁：讀取商品資料與分類清單
+	        int theProductId = productId != null ? Integer.parseInt(productId) : -1;
+	        if (theProductId != -1) {
+	            Product product = ProductService.getProductById(theProductId);
+	            request.setAttribute("product", product);
+	        }
+
+	        request.setAttribute("categories", categories);
+	        request.setAttribute("action", "modify");
+
+	        // ✅ 已 forward，結束執行
+	        request.getRequestDispatcher("product-list.jsp").forward(request, response);
+	        return;
+
+	    } else if (action.equals("delete")) {
+	        // 刪除商品後重新導向
+	        int theProductId = Integer.parseInt(productId);
+	        ProductService.deleteProduct(theProductId);
+	        response.sendRedirect("ProductController?action=showForSeller");
+	        return;
+
+	    } else if (action.equals("detail")) {
+	        // 商品詳情頁
+	        int theProductId = Integer.parseInt(productId);
+	        Product product = ProductService.getProductById(theProductId);
+	        request.setAttribute("product", product);
+	        request.setAttribute("action", "show");
+
+	        // ✅ forward 完後 return，避免下方再次 forward
+	        request.getRequestDispatcher("product-detail.jsp").forward(request, response);
+	        return;
+	    }
+
+	    // 若為 show 或 showForSeller，統一轉發到列表頁
+	    request.getRequestDispatcher("product-list.jsp").forward(request, response);
+	}
+	
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         request.setCharacterEncoding("UTF-8");
-
         String action = request.getParameter("action");
-        String id = request.getParameter("id");
-        String name = request.getParameter("name");
-        String description = request.getParameter("description");
-        String categoryIdStr = request.getParameter("categoryId");
-        String priceStr = request.getParameter("price");
-        String stockStr = request.getParameter("stock");
 
-        int categoryId = Integer.parseInt(categoryIdStr);
-        double price = Double.parseDouble(priceStr);
-        int stock = Integer.parseInt(stockStr);
+        if ("add".equals(action) || "update".equals(action)) {
+            // 讀取基本欄位
+            String name = request.getParameter("name");
+            double price = Double.parseDouble(request.getParameter("price"));
+            int stock = Integer.parseInt(request.getParameter("stock"));
+            String description = request.getParameter("description");
+            int categoryId = Integer.parseInt(request.getParameter("categoryId"));
 
-        HttpSession session = request.getSession(false);
-        String username = (String) session.getAttribute("username");
-        UserDAO userDAO = new UserDAO();
-        int sellerId = userDAO.findUserIdByUsername(username);
-
-        // 🔽 上傳圖片至 Cloudinary，並取得 imageUrl
-        Part imagePart = request.getPart("image");
-        String imageUrl = null;
-
-        if (imagePart != null && imagePart.getSize() > 0) {
-            try (InputStream inputStream = imagePart.getInputStream()) {
-                Cloudinary cloudinary = new Cloudinary(ObjectUtils.asMap(
-                        "cloud_name", "dsnzdecej",
-                        "api_key", "588179336638767",
-                        "api_secret", "8frJ3t9Cb_-CEPhDcNTVFNLZsAA"
-                ));
-
-                @SuppressWarnings("unchecked")
-				Map<String, Object> uploadResult = cloudinary.uploader().upload(inputStream, ObjectUtils.emptyMap());
-                imageUrl = (String) uploadResult.get("secure_url");
-            } catch (Exception e) {
-                e.printStackTrace();
+            // 🟡 圖片上傳
+            Part imagePart = request.getPart("imageFile");
+            String imageUrl = null;
+            if (imagePart != null && imagePart.getSize() > 0) {
+                try {
+                    imageUrl = UploadUtil.uploadImage(imagePart);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
-        }
 
-        if ("add".equals(action)) {
+            // 🟡 從 session 取得 sellerId（登入用戶）
+            HttpSession session = request.getSession();
+            Integer sellerId = (Integer) session.getAttribute("userId");
+
+            if (sellerId == null) {
+                response.sendRedirect("login.jsp"); // 尚未登入，導回登入頁
+                return;
+            }
+
+            // 🟡 組成 Product 物件
             Product product = new Product();
-            product.setSellerId(sellerId);
             product.setName(name);
-            product.setDescription(description);
-            product.setCategoryId(categoryId);
             product.setPrice(price);
             product.setStock(stock);
-            product.setImageUrl(imageUrl); // 🔽 設定圖片網址
-
-            productService.addProduct(product);
-
-        } else if ("update".equals(action)) {
-            int productId = Integer.parseInt(id);
-
-            Product product = new Product();
-            product.setId(productId);
-            product.setSellerId(sellerId);
-            product.setName(name);
             product.setDescription(description);
             product.setCategoryId(categoryId);
-            product.setPrice(price);
-            product.setStock(stock);
-            product.setImageUrl(imageUrl); // 🔽 設定新圖片網址（若有上傳）
+            product.setSellerId(sellerId); // ✅ 設定外鍵欄位
 
-            productService.updateProduct(product);
+            ProductService productService = new ProductService();
+
+            if ("add".equals(action)) {
+                product.setImageUrl(imageUrl); // 新增時直接設定圖片
+                ProductService.addProduct(product);
+
+            } else {
+                int id = Integer.parseInt(request.getParameter("id"));
+                product.setId(id);
+
+                if (imageUrl != null) {
+                    product.setImageUrl(imageUrl); // 有新圖則設定
+                } else {
+                    // 沒上傳新圖片，保留原圖
+                    Product existing = ProductService.getProductById(id);
+                    product.setImageUrl(existing.getImageUrl());
+                }
+
+                ProductService.updateProduct(product);
+            }
+            response.sendRedirect("ProductController?action=showForSeller");
         }
-
-        response.sendRedirect("ProductController?action=showForSeller");
     }
 }

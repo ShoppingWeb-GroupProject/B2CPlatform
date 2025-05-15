@@ -3,6 +3,8 @@ package service;
 import dao.ProductDAO;
 import dao.UserDAO;
 import model.Product;
+import util.UploadUtil;
+
 import java.util.List;
 import java.util.ArrayList;
 
@@ -29,6 +31,24 @@ public class ProductService {
             return emptyList;
         }
     }
+    
+    public boolean deleteProductWithImage(int productId) {
+        Product product = getProductById(productId);
+        if (product == null) return false;
+
+        // 1. 刪除 Cloudinary 圖片
+        String imageUrl = product.getImageUrl();
+        if (imageUrl != null && !imageUrl.isEmpty()) {
+            try {
+                UploadUtil.deleteImageByUrl(imageUrl);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        // 2. 刪除資料庫商品
+        return productDAO.delete(productId);
+    }
 
     /**
      * 查詢指定賣家的所有商品
@@ -47,14 +67,14 @@ public class ProductService {
     /**
      * 新增商品（包含 imageUrl）
      */
-    public boolean addProduct(Product product) {
+    public static boolean addProduct(Product product) {
         return productDAO.insert(product);
     }
 
     /**
      * 更新商品（包含 imageUrl）
      */
-    public boolean updateProduct(Product product) {
+    public static boolean updateProduct(Product product) {
         return productDAO.update(product);
     }
 
