@@ -9,7 +9,7 @@ request.setAttribute("pageTitle", "商品詳細資訊");
 <div class="container mt-5">
 	<div class="row">
 		<div class="col-md-6">
-			<img src="assets/images/men-01.jpg" alt="${product.name}"
+			<img src="${product.imageUrl}" alt="${product.name}"
 				class="img-fluid">
 		</div>
 		<div class="col-md-6">

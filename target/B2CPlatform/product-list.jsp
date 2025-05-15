@@ -52,7 +52,7 @@ request.setAttribute("pageTitle", "首頁");
 				<div class="item">
 					<div class="thumb">
 						<a href="ProductController?action=detail&productId=${product.id}">
-							<img src="assets/images/men-01.jpg" alt="${product.name}">
+							<img src="${product.imageUrl}" alt="${product.name}">
 						</a>
 					</div>
 					<div class="down-content">
@@ -99,7 +99,7 @@ request.setAttribute("pageTitle", "首頁");
 
 <c:if test="${action == 'modify'}">
 
-	<form action="ProductController" method="post">
+	<form action="ProductController" method="post" enctype="multipart/form-data">
 		<input type="hidden" name="action"
 			value="${product.id != null ? 'update' : 'add'}" />
 		<c:if test="${product.id != null}">
@@ -107,12 +107,16 @@ request.setAttribute("pageTitle", "首頁");
 		</c:if>
 
 		<div class="form-grid">
-			<label for="name">商品名稱：</label> <input type="text" id="name"
-				name="name" value="${product.name}" required /> <label for="price">價格：</label>
-			<input type="number" id="price" name="price" step="0.01"
-				value="${product.price}" required /> <label for="stock">庫存：</label>
-			<input type="number" id="stock" name="stock" value="${product.stock}"
-				required /> <label for="description">商品描述：</label>
+			<label for="name">商品名稱：</label>
+			<input type="text" id="name" name="name" value="${product.name}" required />
+
+			<label for="price">價格：</label>
+			<input type="number" id="price" name="price" step="0.01" value="${product.price}" required />
+
+			<label for="stock">庫存：</label>
+			<input type="number" id="stock" name="stock" value="${product.stock}" required />
+
+			<label for="description">商品描述：</label>
 			<textarea id="description" name="description" rows="4">${product.description}</textarea>
 
 			<label for="categoryId">分類：</label>
@@ -125,6 +129,9 @@ request.setAttribute("pageTitle", "首頁");
 			    </c:forEach>
 			</select>
 
+			<!-- 🔽 新增圖片上傳欄位 -->
+			<label for="image">商品圖片：</label>
+			<input type="file" id="image" name="image" accept="image/*" ${product.id == null ? "required" : ""} />
 
 			<div class="btn form-actions">
 				<input type="submit" value="${product.id != null ? '更新商品' : '新增商品'}" />
@@ -133,6 +140,7 @@ request.setAttribute("pageTitle", "首頁");
 	</form>
 
 </c:if>
+
 <!-- ***** Products Area Ends ***** -->
 </div>
 

@@ -119,12 +119,12 @@ public class OrderService {
     /**
      * 發送 LINE 推播訊息
      */
-    private void sendLineNotification(String lineId, String message) {
+    @SuppressWarnings("deprecation")
+	private void sendLineNotification(String lineId, String message) {
         try {
             String accessToken = "nZwO7jWEPnaKr19in4pFq2HdkbC916jCKc7lbR2YLU/DaIubtPhhcs3aDR/wZhRrm41SII3sZE1UXdvJt/AmgxPaJGsSAiSTPbR5m2DMxCAM4KdOZcaJyKz5drJ2CXPOsRVW/HBdHT4L3rpQJoSkcgdB04t89/1O/w1cDnyilFU="; // ← 替換為你的實際 Token
 
-            @SuppressWarnings("deprecation")
-			URL url = new URL("https://api.line.me/v2/bot/message/push");
+            URL url = new URL("https://api.line.me/v2/bot/message/push");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setDoOutput(true);
             conn.setRequestMethod("POST");

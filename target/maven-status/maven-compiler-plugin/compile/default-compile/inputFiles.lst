@@ -18,16 +18,12 @@ C:\Users\codyc\eclipse-workspace\B2CPlatform\src\main\java\controller\UploadImag
 C:\Users\codyc\eclipse-workspace\B2CPlatform\src\main\java\dao\CategoryDAO.java
 C:\Users\codyc\eclipse-workspace\B2CPlatform\src\main\java\service\ProductService.java
 C:\Users\codyc\eclipse-workspace\B2CPlatform\src\main\java\util\DBUtil.java
-C:\Users\codyc\eclipse-workspace\B2CPlatform\src\main\java\dao\ReviewDAO.java
 C:\Users\codyc\eclipse-workspace\B2CPlatform\src\main\java\model\User.java
 C:\Users\codyc\eclipse-workspace\B2CPlatform\src\main\java\controller\OrderDetailController.java
 C:\Users\codyc\eclipse-workspace\B2CPlatform\src\main\java\controller\OrderUpdateController.java
 C:\Users\codyc\eclipse-workspace\B2CPlatform\src\main\java\controller\UserController.java
 C:\Users\codyc\eclipse-workspace\B2CPlatform\src\main\java\model\CartItem.java
-C:\Users\codyc\eclipse-workspace\B2CPlatform\src\main\java\model\ProductImage.java
 C:\Users\codyc\eclipse-workspace\B2CPlatform\src\main\java\service\CartItemService.java
-C:\Users\codyc\eclipse-workspace\B2CPlatform\src\main\java\dao\ProductImageDAO.java
-C:\Users\codyc\eclipse-workspace\B2CPlatform\src\main\java\model\Review.java
 C:\Users\codyc\eclipse-workspace\B2CPlatform\src\main\java\controller\CartItemController.java
 C:\Users\codyc\eclipse-workspace\B2CPlatform\src\main\java\controller\CategoryController.java
 C:\Users\codyc\eclipse-workspace\B2CPlatform\src\main\java\dao\CartItemDAO.java

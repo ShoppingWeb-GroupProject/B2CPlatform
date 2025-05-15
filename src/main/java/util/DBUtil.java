@@ -63,21 +63,10 @@ public class DBUtil {
                 category_id INT,
                 price DOUBLE NOT NULL,
                 stock INT DEFAULT 0,
+                image_url TEXT
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 FOREIGN KEY (seller_id) REFERENCES users(id),
                 FOREIGN KEY (category_id) REFERENCES categories(id)
-            );
-            """,
-
-            // PRODUCTS_IMG
-            """
-            CREATE TABLE IF NOT EXISTS products_img (
-                id INT AUTO_INCREMENT PRIMARY KEY,
-                product_id INT NOT NULL,
-                image_url TEXT NOT NULL,
-                is_main TINYINT(1) DEFAULT 0,
-                uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                FOREIGN KEY (product_id) REFERENCES products(id)
             );
             """,
 

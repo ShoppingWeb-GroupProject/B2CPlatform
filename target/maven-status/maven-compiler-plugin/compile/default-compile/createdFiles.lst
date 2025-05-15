@@ -10,7 +10,6 @@ service\UserService.class
 controller\RegisterController.class
 dao\DiscountDAO.class
 service\CartItemService.class
-model\Review.class
 controller\LoginController.class
 model\Discount.class
 controller\CategoryController.class
@@ -24,11 +23,9 @@ util\MailUtil$1.class
 controller\OrderController.class
 controller\DiscountController.class
 controller\CheckoutController.class
-model\ProductImage.class
 model\User.class
 controller\CheckDuplicateServlet.class
 util\MailUtil.class
-dao\ReviewDAO.class
 controller\CartItemController.class
 util\createDB.class
 service\DiscountService.class
@@ -40,4 +37,3 @@ model\OrderItem.class
 model\Category.class
 controller\LogoutController.class
 dao\ProductDAO.class
-dao\ProductImageDAO.class
