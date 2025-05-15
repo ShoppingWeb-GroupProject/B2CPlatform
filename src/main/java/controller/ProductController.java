@@ -3,6 +3,7 @@ package controller;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 
+import dao.CategoryDAO;
 import dao.UserDAO;
 import model.Product;
 import service.ProductService;
@@ -15,6 +16,7 @@ import jakarta.servlet.http.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Locale.Category;
 import java.util.Map;
 
 @SuppressWarnings("serial")
@@ -56,6 +58,8 @@ public class ProductController extends HttpServlet {
                     // 若格式錯誤，忽略 → 留空 product 進表單即可
                 }
             }
+            List<model.Category> categories = new CategoryDAO().findAllCategories();
+            request.setAttribute("categories", categories);
             request.setAttribute("product", product);
             request.setAttribute("action", "modify");
             request.getRequestDispatcher("product-list.jsp").forward(request, response);
