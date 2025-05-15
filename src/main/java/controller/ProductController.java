@@ -1,18 +1,16 @@
 package controller;
 
-import jakarta.servlet.ServletException;
-import jakarta.servlet.ServletRequest;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.*;
 import java.io.IOException;
 import java.util.List;
-import java.util.Locale.Category;
 
 import dao.CategoryDAO;
 import dao.UserDAO;
-
-import java.util.ArrayList;
-
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import model.Product;
 import service.ProductService;
 
@@ -21,6 +19,7 @@ import service.ProductService;
 public class ProductController extends HttpServlet {
 //	private ProductService productService = new ProductService();
 
+	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 	        throws ServletException, IOException {
 
@@ -30,11 +29,11 @@ public class ProductController extends HttpServlet {
 		// 先確認 action 是否為 null 避免 NullPointerException
 		String action = request.getParameter("action");
 		String productId = request.getParameter("productId");
-		
+
 		// 查詢分類列表
 	    CategoryDAO categoryDAO = new CategoryDAO();
 	    List<model.Category> categories = categoryDAO.findAllCategories();
-	    
+
 
 
 	    if (action == null) {
@@ -99,7 +98,7 @@ public class ProductController extends HttpServlet {
 		String username = (String) session.getAttribute("username");
 		UserDAO theUserDAO = new UserDAO();
 		int userId = theUserDAO.findUserIdByUsername(username);
-		
+
 		request.setCharacterEncoding("UTF-8");
 
 		String action = request.getParameter("action");

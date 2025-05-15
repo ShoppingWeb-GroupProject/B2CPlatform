@@ -1,12 +1,16 @@
 package dao;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
 import model.Order;
 import model.OrderItem;
 import util.DBUtil;
-
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * OrderDAO
@@ -14,7 +18,7 @@ import java.util.List;
  *   - 處理訂單資料庫操作，包括新增、查詢、更新
  */
 public class OrderDAO {
-	
+
 	public Order findOrderById(int orderId) {
 	    String sql = "SELECT * FROM orders WHERE id = ?";
 	    try (Connection conn = DBUtil.getConnection();

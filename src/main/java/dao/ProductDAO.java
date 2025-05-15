@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
 import model.Product;
 import util.DBUtil;
 
@@ -77,7 +78,7 @@ public class ProductDAO {
 
 	    try (Connection conn = DBUtil.getConnection();
 	         PreparedStatement stmt = conn.prepareStatement(sql)) {
-	        
+
 	        stmt.setInt(1, sellerId);
 	        try (ResultSet rs = stmt.executeQuery()) {
 	            while (rs.next()) {
@@ -104,7 +105,7 @@ public class ProductDAO {
 	    String sql = "SELECT * FROM products WHERE id = ?";
 	    try (Connection conn = DBUtil.getConnection();
 	         PreparedStatement stmt = conn.prepareStatement(sql)) {
-	        
+
 	        stmt.setInt(1, id);
 	        try (ResultSet rs = stmt.executeQuery()) {
 	            if (rs.next()) {
@@ -145,7 +146,7 @@ public class ProductDAO {
 	    }
 	    return true;
 	}
-	
+
     // 🔵 更新商品
 	public boolean update(Product product) {
 	    String sql = "UPDATE products SET seller_id=?, name=?, description=?, category_id=?, price=?, stock=? " +
@@ -168,13 +169,13 @@ public class ProductDAO {
 	    }
 	    return true;
 	}
-	
+
     // 🔵 刪除商品
 	public boolean delete(int id) {
 	    String sql = "DELETE FROM products WHERE id = ?";
 	    try (Connection conn = DBUtil.getConnection();
 	         PreparedStatement stmt = conn.prepareStatement(sql)) {
-	        
+
 	        stmt.setInt(1, id);
 	        stmt.executeUpdate();
 	    } catch (SQLException e) {

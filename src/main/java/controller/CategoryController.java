@@ -1,14 +1,15 @@
 package controller;
 
-import dao.CategoryDAO;
-import model.Category;
-
-import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.*;
-
 import java.io.IOException;
 import java.util.List;
+
+import dao.CategoryDAO;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import model.Category;
 
 @WebServlet("/CategoryController")
 public class CategoryController extends HttpServlet {

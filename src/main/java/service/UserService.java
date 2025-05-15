@@ -1,9 +1,9 @@
 package service;
 
+import java.util.List;
+
 import dao.UserDAO;
 import model.User;
-
-import java.util.List;
 
 /**
  * 使用者服務層
@@ -12,7 +12,7 @@ import java.util.List;
 public class UserService {
 
     private UserDAO userDAO = new UserDAO();
-    
+
     public boolean updateLineId(int userId, String lineId) {
         return userDAO.updateLineId(userId, lineId);
     }

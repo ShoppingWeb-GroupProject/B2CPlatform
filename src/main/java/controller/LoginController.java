@@ -8,9 +8,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-
-import service.UserService;
 import model.User;
+import service.UserService;
 
 /**
  * LoginController
@@ -25,7 +24,8 @@ public class LoginController extends HttpServlet {
     // 使用 UserService 來處理登入邏輯
     private UserService userService = new UserService();
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) 
+    @Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
 
         // 取得表單提交的帳號與密碼

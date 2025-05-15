@@ -99,7 +99,7 @@ public class Product {
     public void setPrice(double price) {
         this.price = price;
     }
-    
+
     /** 設定商品庫存數量 */
     public void setStock(int stock) {
         this.stock = stock;

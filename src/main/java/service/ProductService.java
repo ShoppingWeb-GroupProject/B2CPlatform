@@ -1,10 +1,11 @@
 package service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import dao.ProductDAO;
 import dao.UserDAO;
 import model.Product;
-import java.util.List;
-import java.util.ArrayList;
 /**
  * ProductService
  * 用途：
@@ -16,8 +17,8 @@ public class ProductService {
 
 	private static ProductDAO productDAO = new ProductDAO();
 	private static UserDAO userDAO = new UserDAO();
-	private static List<Product> emptyList = new ArrayList<Product>();
-	
+	private static List<Product> emptyList = new ArrayList<>();
+
     /**
      * 查詢所有商品
      * @return 商品列表
@@ -31,7 +32,7 @@ public class ProductService {
 			return emptyList;
 		}
 	}
-	
+
     /**
      * 查詢指定賣家的商品
      * @param sellerUsername 賣家帳號

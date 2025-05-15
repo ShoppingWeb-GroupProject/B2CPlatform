@@ -1,11 +1,14 @@
 package dao;
 
-import model.User;
-import util.DBUtil;
-
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import model.User;
+import util.DBUtil;
 
 public class UserDAO {
 
@@ -245,7 +248,7 @@ public class UserDAO {
             return false;
         }
     }
-    
+
     public boolean updateLineId(int userId, String lineId) {
         String sql = "UPDATE users SET line_id = ? WHERE id = ?";
         try (Connection conn = DBUtil.getConnection();

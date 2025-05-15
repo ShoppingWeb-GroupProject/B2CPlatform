@@ -1,9 +1,9 @@
 package service;
 
+import java.util.List;
+
 import dao.CategoryDAO;
 import model.Category;
-
-import java.util.List;
 
 public class CategoryService {
 

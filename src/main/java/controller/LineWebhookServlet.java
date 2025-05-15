@@ -1,11 +1,14 @@
 package controller;
 
-import jakarta.servlet.http.*;
-import org.json.JSONObject;
-import service.UserService;
-
 import java.io.BufferedReader;
 import java.io.IOException;
+
+import org.json.JSONObject;
+
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import service.UserService;
 
 /**
  * LineWebhookServlet
