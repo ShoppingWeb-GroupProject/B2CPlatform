@@ -7,7 +7,7 @@
 			<div class="col-lg-3">
                     <div class="first-item">
                         <div class="logo">
-                            <img src="assets/images/white-logo.png" alt="hexashop ecommerce templatemo">
+                            <img src="assets/images/KIXADO-white.png" alt="hexashop ecommerce templatemo" width="150">
                         </div>
                         <!-- <ul>
                             <li><a href="#">16501 Collins Ave, Sunny Isles Beach, FL 33160, United States</a></li>
