@@ -1,6 +1,7 @@
 controller\OrderDetailController.class
 model\CartItem.class
 dao\OrderDAO.class
+controller\UploadImageServlet.class
 controller\OrderUpdateController.class
 controller\UserController.class
 util\DBUtil.class

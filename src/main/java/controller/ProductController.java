@@ -5,8 +5,10 @@ import jakarta.servlet.ServletRequest;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Locale.Category;
+import java.util.Map;
 
 import dao.CategoryDAO;
 import dao.UserDAO;
@@ -139,6 +141,32 @@ public class ProductController extends HttpServlet {
 
 			Product product = new Product(0, userId, name, description, categoryId, price, stock);
 			productService.addProduct(product);
+            try {
+                Part imagePart = request.getPart("image");
+                if (imagePart != null && imagePart.getSize() > 0) {
+                    InputStream fileStream = imagePart.getInputStream();
+
+                    com.cloudinary.Cloudinary cloudinary = new com.cloudinary.Cloudinary(com.cloudinary.utils.ObjectUtils.asMap(
+                        "cloud_name", "dsnzdecej",
+                        "api_key", "588179336638767",
+                        "api_secret", "8frJ3t9Cb_-CEPhDcNTVFNLZsAA"
+                    ));
+
+                    @SuppressWarnings("unchecked")
+					Map<String, Object> uploadResult = cloudinary.uploader().upload(fileStream, com.cloudinary.utils.ObjectUtils.emptyMap());
+                    String imageUrl = (String) uploadResult.get("secure_url");
+
+                    model.ProductImage image = new model.ProductImage();
+                    image.setProductId(productService.findLastProductIdByUserId(userId)); // 取剛新增商品 ID
+                    image.setImageUrl(imageUrl);
+                    image.setMain(true);
+
+                    new dao.ProductImageDAO().addProductImage(image);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
 
 		} else if (action.equals("update")) {
 			try {

@@ -18,6 +18,11 @@ public class ProductService {
 	private static UserDAO userDAO = new UserDAO();
 	private static List<Product> emptyList = new ArrayList<Product>();
 	
+	
+	public int findLastProductIdByUserId(int userId) {
+	    return productDAO.findLastInsertedProductIdByUserId(userId);
+	}
+
     /**
      * 查詢所有商品
      * @return 商品列表

@@ -183,4 +183,21 @@ public class ProductDAO {
 	    }
 	    return true;
 	}
+
+	public int findLastInsertedProductIdByUserId(int userId) {
+	    int lastId = -1;
+	    String sql = "SELECT id FROM products WHERE seller_id = ? ORDER BY id DESC LIMIT 1";
+	    try (Connection conn = DBUtil.getConnection();
+	         PreparedStatement stmt = conn.prepareStatement(sql)) {
+	        stmt.setInt(1, userId);
+	        ResultSet rs = stmt.executeQuery();
+	        if (rs.next()) {
+	            lastId = rs.getInt("id");
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    return lastId;
+	}
+
 }
