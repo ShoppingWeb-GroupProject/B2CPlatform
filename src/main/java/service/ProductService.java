@@ -1,12 +1,12 @@
 package service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import dao.ProductDAO;
 import dao.UserDAO;
 import model.Product;
 import util.UploadUtil;
-
-import java.util.List;
-import java.util.ArrayList;
 
 /**
  * ProductService

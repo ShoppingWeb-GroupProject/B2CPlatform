@@ -1,14 +1,15 @@
 package controller;
 
-import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.*;
-
-import model.OrderItem;
-import service.OrderService;
-
 import java.io.IOException;
 import java.util.List;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import model.OrderItem;
+import service.OrderService;
 
 /**
  * OrderDetailController
@@ -21,7 +22,8 @@ public class OrderDetailController extends HttpServlet {
 
     private OrderService orderService = new OrderService();
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    @Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         // 從請求參數取得 orderId

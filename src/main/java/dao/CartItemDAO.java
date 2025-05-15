@@ -1,11 +1,14 @@
 package dao;
 
-import model.CartItem;
-import util.DBUtil;
-
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import model.CartItem;
+import util.DBUtil;
 
 /**
  * 購物車資料存取層
@@ -34,7 +37,7 @@ public class CartItemDAO {
             return false;
         }
     }
-    
+
     // 🔵 更新購物車項目數量
     public boolean updateCartItemQuantity(int userId, int productId, int quantity) {
         String sql = "UPDATE cart_items SET quantity = ? WHERE user_id = ? AND product_id = ?";
@@ -105,7 +108,7 @@ public class CartItemDAO {
 
         return items;
     }
-    
+
     // 🔵 清空購物車
     public boolean clearCartByUserId(int userId) {
         String sql = "DELETE FROM cart_items WHERE user_id = ?";

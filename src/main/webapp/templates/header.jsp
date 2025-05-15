@@ -60,7 +60,7 @@ https://templatemo.com/tm-571-hexashop
 					<nav class="main-nav">
 						<!-- ***** Logo Start ***** -->
 						<a href="index.jsp" class="logo"> <img
-							src="assets/images/logo.png">
+							src="assets/images/KIXADO-gray.png" width="150">
 						</a>
 						<!-- ***** Logo End ***** -->
 						<!-- ***** Menu Start ***** -->

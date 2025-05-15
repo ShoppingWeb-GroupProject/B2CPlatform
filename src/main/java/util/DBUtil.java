@@ -148,7 +148,7 @@ public class DBUtil {
 
         String[] insertCategories = {
             """
-            INSERT INTO categories (name, description) VALUES 
+            INSERT INTO categories (name, description) VALUES
             ('電子產品', '各式電子裝置、配件'),
             ('服飾', '男女服飾、鞋包、配件'),
             ('書籍', '各類書籍、雜誌、漫畫'),

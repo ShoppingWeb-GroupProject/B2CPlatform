@@ -7,13 +7,13 @@ public class User {
     private String email;
     private String role;
     private boolean isBlacklisted;
-    private String phone;  
-    private String address; 
+    private String phone;
+    private String address;
     private double discount;
     private String lineId;
 
     // === Getter & Setter ===
-    
+
     public String getLineId() { return lineId; }
     public void setLineId(String lineId) { this.lineId = lineId; }
 

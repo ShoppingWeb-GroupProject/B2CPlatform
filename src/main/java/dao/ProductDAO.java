@@ -177,7 +177,6 @@ public class ProductDAO {
         String sql = "SELECT id FROM products WHERE seller_id = ? ORDER BY id DESC LIMIT 1";
         try (Connection conn = DBUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-
             stmt.setInt(1, userId);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {

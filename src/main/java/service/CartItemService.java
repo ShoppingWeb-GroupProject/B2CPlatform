@@ -1,17 +1,17 @@
 package service;
 
+import java.util.List;
+
 import dao.CartItemDAO;
 import dao.UserDAO;
 import model.CartItem;
-
-import java.util.List;
 
 public class CartItemService {
 	private final CartItemDAO cartDAO = new CartItemDAO();
 	private UserDAO userDAO = new UserDAO();
 	@SuppressWarnings("unused")
 	private CartItem theCart = new CartItem();
-	
+
 	// ✅ 根據 username 查詢購物車內容
     public List<CartItem> getCartItemsByUsername(String username) {
         int userId = userDAO.findUserIdByUsername(username);
@@ -21,8 +21,9 @@ public class CartItemService {
     // ✅ 加入或更新購物車項目
     public boolean addOrUpdateCartItem(String username, int productId, int quantity) {
     	int userId = userDAO.findUserIdByUsername(username);
-		if (userId == -1)
+		if (userId == -1) {
 			return false;
+		}
 
         // 檢查是否已有該項目，已有則更新數量
         List<CartItem> existingItems = cartDAO.getCartItemsByUserId(userId);
@@ -43,8 +44,9 @@ public class CartItemService {
 
 	public boolean removeItem(String username, int productId) {
 		int userId = userDAO.findUserIdByUsername(username);
-		if (userId == -1)
+		if (userId == -1) {
 			return false;
+		}
 		return cartDAO.removeCartItem(userId, productId);
 	}
 

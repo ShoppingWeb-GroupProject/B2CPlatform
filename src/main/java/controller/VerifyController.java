@@ -1,13 +1,15 @@
 package controller;
 
+import java.io.IOException;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.*;
-
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import model.User;
 import service.UserService;
-
-import java.io.IOException;
 
 @SuppressWarnings("serial")
 @WebServlet("/VerifyController")
@@ -15,7 +17,8 @@ public class VerifyController extends HttpServlet {
 
     private UserService userService = new UserService();
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    @Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         String inputCode = request.getParameter("code");

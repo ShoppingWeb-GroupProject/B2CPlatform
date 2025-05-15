@@ -99,6 +99,7 @@ public class ProductController extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         String action = request.getParameter("action");
 
+
         if ("add".equals(action) || "update".equals(action)) {
             // 讀取基本欄位
             String name = request.getParameter("name");

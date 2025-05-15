@@ -1,13 +1,16 @@
 package controller;
 
-import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.*;
-import model.CartItem;
-import service.CartItemService;
-
 import java.io.IOException;
 import java.util.List;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import model.CartItem;
+import service.CartItemService;
 
 @SuppressWarnings("serial")
 @WebServlet("/CartItemController")
@@ -16,7 +19,8 @@ public class CartItemController extends HttpServlet {
     private CartItemService cartItemService = new CartItemService();
 
     // ✅ 顯示購物車內容（GET）
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    @Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         HttpSession session = request.getSession(false);
@@ -41,7 +45,8 @@ public class CartItemController extends HttpServlet {
         request.getRequestDispatcher("cart.jsp").forward(request, response);
     }
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    @Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         HttpSession session = request.getSession(false);
