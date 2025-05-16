@@ -1,0 +1,113 @@
+@charset "UTF-8";
+
+/* === Layout 容器設定 === */
+.btn {
+	padding: 4px 8px;
+	margin: 2px 0;
+	width: 100%;
+	background-color: #f5f5f5;
+	text-decoration: none;
+	border-radius: 4px;
+}
+
+.btn input {
+	border-style: none;
+}
+
+.cart-wrapper {
+	max-width: 900px;
+	margin: auto;
+}
+
+.grid-container {
+	display: grid;
+	align-items: center;
+	margin-bottom: 1em;
+	justify-items: center;
+	gap: 10px;
+}
+
+.form-grid {
+	display: grid;
+	grid-template-columns: 200px 1fr;
+	align-items: center;
+	margin-bottom: 1em;
+	justify-items: left;
+	gap: 10px;
+}
+
+.form-actions {
+	grid-column: 1/-1;
+}
+
+/* === Grid 表格結構 === */
+.cart-container {
+	display: grid;
+	grid-template-columns: repeat(5, 1fr); /* 多一欄放刪除按鈕 */
+	font-weight: bold;
+	padding: 10px 0;
+}
+
+.cart-item {
+	display: grid;
+	grid-template-columns: repeat(5, 1fr);
+	gap: 10px;
+	padding: 8px 0;
+	border-bottom: 1px solid #ccc;
+	align-items: center;
+}
+
+.grid-header {
+	padding: 10px 0;
+	border-bottom: 1px solid #ccc;
+}
+
+.grid-header {
+	font-weight: bold;
+	background-color: #f5f5f5;
+}
+
+.grid-row {
+	border-color: #eee;
+	grid-template-columns: repeat(3, 1fr);
+	padding: 20px;
+}
+
+.grid-all, .grid-ForSeller {
+	grid-template-columns: repeat(6, 1fr);
+}
+
+/* === 表單樣式 === */
+form.remove-form {
+	margin: 0;
+}
+
+/* === 文字輸入區域 === */
+.form-grid textarea {
+	width: 100%;
+}
+
+/* === 文字樣式與小工具 === */
+.total {
+	font-size: 18px;
+	margin-top: 20px;
+}
+
+.inline {
+	display: inline-block;
+}
+
+.message {
+	color: green;
+}
+
+.error {
+	color: red;
+}
+
+/* === RWD 響應式設計 === */
+@media screen and (max-width: 900px) {
+	.grid-row {
+		grid-template-columns: 1fr;
+	}
+}
