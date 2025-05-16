@@ -72,7 +72,7 @@ request.setAttribute("pageTitle", "首頁");
 		class="grid-container grid-header"  style="grid-template-columns: repeat(6, 1fr);">
 		<div>商品名稱</div>
 		<div>描述</div>
-		<div>分類ID</div>
+		<div>分類</div>
 		<div>價格</div>
 		<div>庫存</div>
 		<div>操作</div>
@@ -83,7 +83,11 @@ request.setAttribute("pageTitle", "首頁");
 			class="grid-container"  style="grid-template-columns: repeat(6, 1fr);">
 			<div>${product.name}</div>
 			<div>${product.description}</div>
-			<div>${product.categoryId}</div>
+			<div>
+			<c:forEach var="category" items="${categories}">
+                        <c:if test="${category.id == product.categoryId}">${category.name}</c:if>
+            </c:forEach>
+            </div>
 			<div>${product.price}</div>
 			<div>${product.stock}</div>
 			<c:if test="${action=='showForSeller'}">

@@ -52,6 +52,7 @@ public class ProductController extends HttpServlet {
 	        // 取得賣家上架的商品
 	        List<Product> showProducts = ProductService.getSellerProducts(username);
 	        request.setAttribute("showProducts", showProducts);
+	        request.setAttribute("categories", categories);
 	        request.setAttribute("action", "showForSeller");
 
 	    } else if (action.equals("modify")) {
