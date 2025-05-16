@@ -95,9 +95,9 @@ public class ProductService {
 //    /**
 //     * 查詢指定分類下的商品
 //     */
-//    public List<Product> getProductsByCategory(int categoryId) {
-//        return productDAO.findByCategory(categoryId);
-//    }
+    public static List<Product> getProductsByCategory(int categoryId) {
+        return productDAO.findByCategory(categoryId);
+    }
 
     /**
      * 🔽 新增方法：取得某位使用者最後新增的商品 ID
