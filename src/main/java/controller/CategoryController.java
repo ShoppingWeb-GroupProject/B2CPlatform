@@ -42,6 +42,7 @@ public class CategoryController extends HttpServlet {
             category.setName(name);
             category.setDescription(description);
             categoryDAO.addCategory(category);
+            request.setAttribute("message", "已完成新增");
 
         } else if ("update".equals(action)) {
             // 修改分類
@@ -53,6 +54,7 @@ public class CategoryController extends HttpServlet {
             category.setName(name);
             category.setDescription(description);
             categoryDAO.updateCategory(category);
+            request.setAttribute("message", "已完成修改");
 
         } else if ("delete".equals(action)) {
             // 刪除分類
@@ -61,6 +63,8 @@ public class CategoryController extends HttpServlet {
         }
 
         // 完成操作後重導回分類頁，避免重複提交
-        response.sendRedirect("CategoryController");
+        List<Category> categories = categoryDAO.findAllCategories();
+        request.setAttribute("categories", categories);
+        request.getRequestDispatcher("Category.jsp").forward(request, response);
     }
 }

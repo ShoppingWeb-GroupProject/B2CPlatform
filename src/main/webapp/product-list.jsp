@@ -85,7 +85,7 @@ request.setAttribute("pageTitle", "首頁");
 			<div>${product.name}</div>
 			<div><img src="${product.imageUrl}" alt="${product.name}" class="img-fluid"></div>
 			<div>
-			 ${product.description.length() < 10 ? product.description : product.description.substring(0, 20)}...
+			 ${product.description.length() < 20 ? product.description : product.description.substring(0, 20)}...
 			</div>
 			 <div>
 			<c:forEach var="category" items="${categories}">
@@ -152,5 +152,17 @@ request.setAttribute("pageTitle", "首頁");
 
 <!-- ***** Products Area Ends ***** -->
 </div>
+
+<script>
+  function truncateText(selector, limit) {
+    const elements = document.querySelectorAll(selector);
+    elements.forEach(el => {
+      const txt = el.textContent;
+      el.textContent = txt.length > limit ? txt.slice(0, limit) + "..." : txt;
+    });
+  }
+
+  truncateText(".ellipsis", 30);
+</script>
 
 <%@ include file="/templates/footer.jsp"%>
