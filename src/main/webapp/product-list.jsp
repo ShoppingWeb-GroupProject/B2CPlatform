@@ -82,7 +82,7 @@ request.setAttribute("pageTitle", "首頁");
 		<div
 			class="grid-container"  style="grid-template-columns: repeat(6, 1fr);">
 			<div>${product.name}</div>
-			<div>${product.description}</div>
+			<div class="ellipsis" >${product.description}</div>
 			<div>
 			<c:forEach var="category" items="${categories}">
                         <c:if test="${category.id == product.categoryId}">${category.name}</c:if>
@@ -147,5 +147,17 @@ request.setAttribute("pageTitle", "首頁");
 
 <!-- ***** Products Area Ends ***** -->
 </div>
+
+<script>
+  function truncateText(selector, limit) {
+    const elements = document.querySelectorAll(selector);
+    elements.forEach(el => {
+      const txt = el.textContent;
+      el.textContent = txt.length > limit ? txt.slice(0, limit) + "..." : txt;
+    });
+  }
+
+  truncateText(".ellipsis", 30);
+</script>
 
 <%@ include file="/templates/footer.jsp"%>
