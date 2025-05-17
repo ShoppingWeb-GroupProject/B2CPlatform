@@ -9,7 +9,7 @@ public class ReviewService {
 
     // ✅ 查詢某商品的所有評論
     public List<Review> getReviewsByProduct(int productId) {
-        return reviewDAO.getReviewsByProductId(productId);
+        return reviewDAO.findReviewsByProductId(productId);
     }
 
     // ✅ 新增一筆評論
@@ -26,4 +26,13 @@ public class ReviewService {
     public void deleteReview(int reviewId) {
         reviewDAO.deleteReview(reviewId);
     }
+    public boolean replyToReview(int reviewId, String reply) {
+        return reviewDAO.replyToReview(reviewId, reply);
+    }
+
+	public void updateReviewReply(Review review) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

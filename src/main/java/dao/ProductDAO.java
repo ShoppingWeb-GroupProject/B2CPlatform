@@ -188,4 +188,25 @@ public class ProductDAO {
         }
         return lastId;
     }
+
+	public List<Product> findByCategory(int categoryId) {
+		List<Product> products = new ArrayList<>();
+        String sql = "SELECT * FROM products WHERE category_id = ?";
+
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, categoryId);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                products.add(mapResultSetToProduct(rs));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return products;
+	}
 }

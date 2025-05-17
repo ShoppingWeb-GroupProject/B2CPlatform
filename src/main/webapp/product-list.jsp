@@ -69,8 +69,9 @@ request.setAttribute("pageTitle", "首頁");
 <c:if test="${action=='showForSeller'}">
 	<div class="btn"><a href="ProductController?action=modify">新增商品</a></div>
 	<div
-		class="grid-container grid-header"  style="grid-template-columns: repeat(6, 1fr);">
+		class="grid-container grid-header"  style="grid-template-columns: repeat(7, 1fr);">
 		<div>商品名稱</div>
+		<div>商品圖</div>
 		<div>描述</div>
 		<div>分類</div>
 		<div>價格</div>
@@ -80,10 +81,13 @@ request.setAttribute("pageTitle", "首頁");
 
 	<c:forEach var="product" items="${showProducts}">
 		<div
-			class="grid-container"  style="grid-template-columns: repeat(6, 1fr);">
+			class="grid-container"  style="grid-template-columns: repeat(7, 1fr);">
 			<div>${product.name}</div>
-			<div>${product.description}</div>
+			<div><img src="${product.imageUrl}" alt="${product.name}" class="img-fluid"></div>
 			<div>
+			 ${product.description.length() < 10 ? product.description : product.description.substring(0, 20)}...
+			</div>
+			 <div>
 			<c:forEach var="category" items="${categories}">
                         <c:if test="${category.id == product.categoryId}">${category.name}</c:if>
             </c:forEach>
@@ -94,6 +98,7 @@ request.setAttribute("pageTitle", "首頁");
 				<div>
 					<div class="btn"><a href="ProductController?action=modify&productId=${product.id}">編輯</a></div>
 					<div class="btn"><a href="ProductController?action=delete&productId=${product.id}">刪除</a></div>
+					<div class="btn"><a href="ProductController?action=detail&productId=${product.id}">查看評論</a></div>
 				</div>
 			</c:if>
 		</div>
