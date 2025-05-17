@@ -9,6 +9,9 @@ public class Review {
     private int rating;
     private String comment;
     private Timestamp createdAt;
+    private String username; // ✅ 留言者帳號名稱
+
+    // === Getter/Setter ===
 
     public int getId() {
         return id;
@@ -56,5 +59,13 @@ public class Review {
 
     public void setCreatedAt(Timestamp createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

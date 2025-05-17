@@ -81,10 +81,17 @@ public class ProductController extends HttpServlet {
 	        // 商品詳情頁
 	        int theProductId = Integer.parseInt(productId);
 	        Product product = ProductService.getProductById(theProductId);
+
+	        // ✅ 加入 Review 服務
+	        service.ReviewService reviewService = new service.ReviewService();
+	        List<model.Review> reviews = reviewService.getReviewsByProduct(theProductId);
+
 	        request.setAttribute("product", product);
 	        request.setAttribute("action", "show");
+	        request.setAttribute("categories", categories);   // ✅ 分類資料
+	        request.setAttribute("reviews", reviews);         // ✅ 新增評論清單
 
-	        // ✅ forward 完後 return，避免下方再次 forward
+	        // ✅ forward 回 JSP
 	        request.getRequestDispatcher("product-detail.jsp").forward(request, response);
 	        return;
 	    }
