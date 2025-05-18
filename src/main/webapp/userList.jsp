@@ -15,7 +15,7 @@
 		<div>黑名單</div>
 		<div>電話</div>
 		<div>地址</div>
-		<div>操作</div>
+		<div></div>
 	</div>
 
 	<!-- 使用者資料 -->

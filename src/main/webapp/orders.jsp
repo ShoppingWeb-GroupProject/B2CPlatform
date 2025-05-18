@@ -42,7 +42,7 @@ request.setAttribute("pageTitle", "訂單管理");
 						<div>送達地址</div>
 						<div>狀態</div>
 						<div>下單時間</div>
-						<div>操作</div>
+						<div></div>
 						<div>明細</div>
 					</div>
 				</c:when>
@@ -55,7 +55,7 @@ request.setAttribute("pageTitle", "訂單管理");
 						<div>送達地址</div>
 						<div>狀態</div>
 						<div>下單時間</div>
-						<div>操作</div>
+						<div></div>
 						<div>明細</div>
 					</div>
 				</c:when>
@@ -74,28 +74,28 @@ request.setAttribute("pageTitle", "訂單管理");
 						<!-- 操作按鈕 -->
 						<form action="OrderUpdateController" method="post"
 							style="display: inline;">
-							<div class="btn">
+							<div>
 								<c:choose>
 									<c:when test="${order.status == 'pending'}">
 										<input type="hidden" name="orderId" value="${order.id}">
 										<input type="hidden" name="action" value="cancel">
-										<input type="submit" value="取消訂單">
+										<button class="btn" type="submit">取消訂單</button>
 									</c:when>
 									<c:when test="${order.status == 'shipped'}">
 										<input type="hidden" name="orderId" value="${order.id}">
 										<input type="hidden" name="action" value="complete">
-										<input type="submit" value="確認完成">
+										<button class="btn" type="submit">確認完成</button>
 									</c:when>
 								</c:choose>
 							</div>
 						</form>
 	
 						<!-- 查看明細 -->
-						<div class="btn">
+						<div>
 							<form action="OrderDetailController" method="get"
 								style="display: inline;">
 								<input type="hidden" name="orderId" value="${order.id}">
-								<input type="submit" value="查看明細">
+								<button class="btn">查看明細</button>
 							</form>
 						</div>
 					</div>

@@ -25,7 +25,7 @@ request.getAttribute("message");
 		<div>ID</div>
 		<div>名稱</div>
 		<div>描述</div>
-		<div>操作</div>
+		<div></div>
 	</div>
 
 	<c:forEach var="category" items="${categories}">
@@ -63,8 +63,5 @@ request.getAttribute("message");
 </div>
 
 </div>
-
-
-
 
 <%@ include file="/templates/footer.jsp"%>

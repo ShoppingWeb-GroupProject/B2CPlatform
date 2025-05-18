@@ -51,46 +51,6 @@ request.setAttribute("pageTitle", "註冊");
 	<button class="btn form-actions" type="submit">註冊</button>
 </form>
 
-
-
 </div>
-<script>
-    function checkField(field, value, resultSpanId) {
-        if (!value) {
-            document.getElementById(resultSpanId).textContent = '';
-            return;
-        }
-
-        fetch('CheckDuplicateServlet?field=' + field + '&value=' + encodeURIComponent(value))
-            .then(response => response.json()) // ⬅️ 解析 JSON 回應
-            .then(data => {
-                const span = document.getElementById(resultSpanId);
-                span.textContent = data.message;
-                span.style.color = data.status === 'exists' ? 'red' : 'blue';
-            })
-            .catch(error => {
-                console.error('驗證失敗:', error);
-            });
-    }
-    
-    function validatePasswordMatch() {
-        const password = document.querySelector('input[name="password"]').value;
-        const confirmPassword = document.querySelector('input[name="confirmPassword"]').value;
-        const messageSpan = document.getElementById("passwordCheck");
-
-        if (!confirmPassword) {
-            messageSpan.textContent = '';
-            return;
-        }
-
-        if (password !== confirmPassword) {
-            messageSpan.textContent = "密碼不一致";
-            messageSpan.style.color = "red";
-        } else {
-            messageSpan.textContent = "";
-        }
-    }
-
-    </script>
 
 <%@ include file="/templates/footer.jsp"%>

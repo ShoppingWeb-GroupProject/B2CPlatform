@@ -80,9 +80,8 @@ https://templatemo.com/tm-571-hexashop
 								<li class="scroll-to-section"><a href="login.jsp">登入</a></li>
 							</c:if>
 							<c:if test="${not empty sessionScope.username}">
+								<li class="scroll-to-section"><a href="userProfile.jsp">個人資料</a></li>
 								<li class="scroll-to-section"><a href="OrderController">訂單查詢</a></li>
-
-
 
 								<c:url var="productShow" value="ProductController">
 									<c:param name="action" value="show" />

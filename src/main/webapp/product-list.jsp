@@ -76,7 +76,7 @@ request.setAttribute("pageTitle", "首頁");
 		<div>分類</div>
 		<div>價格</div>
 		<div>庫存</div>
-		<div>操作</div>
+		<div></div>
 	</div>
 
 	<c:forEach var="product" items="${showProducts}">

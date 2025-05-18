@@ -58,7 +58,7 @@ public class UserService {
     /**
      * 更新使用者基本資料
      */
-    public boolean updateUser(User user) {
+    public boolean updateUserProfile(User user) {
         return userDAO.updateUser(user);
     }
 

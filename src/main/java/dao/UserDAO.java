@@ -144,21 +144,17 @@ public class UserDAO {
      * 更新使用者資料（不含密碼）
      */
     public boolean updateUser(User user) {
-        String sql = "UPDATE users SET username = ?, email = ?, role = ?, phone = ?, address = ?, is_blacklisted = ?, discount = ? WHERE id = ?";
+        String sql = "UPDATE users SET email = ?, phone = ?, address = ? WHERE id = ?";
         try (Connection conn = DBUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setString(1, user.getUsername());
-            stmt.setString(2, user.getEmail());
-            stmt.setString(3, user.getRole());
-            stmt.setString(4, user.getPhone());
-            stmt.setString(5, user.getAddress());
-            stmt.setBoolean(6, user.isBlacklisted());
-            stmt.setDouble(7, user.getDiscount());
-            stmt.setInt(8, user.getId());
+            stmt.setString(1, user.getEmail());
+            stmt.setString(2, user.getPhone());
+            stmt.setString(3, user.getAddress());
+            stmt.setInt(4, user.getId());
 
-            return stmt.executeUpdate() > 0;
-
+            int rows = stmt.executeUpdate();
+            return rows > 0;
         } catch (SQLException e) {
             e.printStackTrace();
             return false;

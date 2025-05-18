@@ -27,7 +27,7 @@ request.setAttribute("pageTitle", "購物車");
 					<div>價格</div>
 					<div>數量</div>
 					<div>小計</div>
-					<div>操作</div>
+					<div></div>
 				</div>
 
 				<c:set var="total" value="0" />

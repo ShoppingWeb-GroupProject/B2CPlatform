@@ -33,7 +33,7 @@ request.setAttribute("productMap", productMap);
 <div class="container mt-5">
 	<div style="display: flex; overflow-x: auto;">
 		<c:forEach var="category" items="${categories}">
-			<div style="margin: 5px;">
+			<div style="margin: 5px; min-width: 300px;">
 				<div>
 					<strong>分類：</strong> ${category.name}
 				</div>
@@ -51,10 +51,18 @@ request.setAttribute("productMap", productMap);
 								<c:url var="toProduct"
 									value="ProductController?action=detail&productId=${product.id}"></c:url>
 							</c:if>
-							<a href="${toProduct}">
-								<c:out value="${product.name}" default="無商品" /><br /> <img
-								src="${product.imageUrl}" alt="無商品" width="300" />
-							</a>
+							<c:choose>
+								<c:when test="${not empty product.id && product.id != ''}">
+									<a href="${toProduct}">
+										<div>${product.name}</div> <img src="${product.imageUrl}"
+										alt="暫無圖片" width="300" />
+									</a>
+								</c:when>
+								<c:otherwise>
+									<div>暫無商品</div>
+								</c:otherwise>
+							</c:choose>
+
 
 						</c:when>
 						<c:otherwise>
