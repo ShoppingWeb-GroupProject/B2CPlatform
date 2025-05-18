@@ -30,7 +30,8 @@ public class ProductController extends HttpServlet {
 
         HttpSession session = request.getSession(false);
         String username = (String) session.getAttribute("username");
-        String role = (String) session.getAttribute("role");
+        @SuppressWarnings("unused")
+		String role = (String) session.getAttribute("role");
         String action = request.getParameter("action");
         String productId = request.getParameter("productId");
 

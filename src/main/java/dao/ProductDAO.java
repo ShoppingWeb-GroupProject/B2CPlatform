@@ -171,7 +171,7 @@ public class ProductDAO {
         return product;
     }
 
-    // 🔍 新增方法：取得某位賣家最後一筆商品 ID（給圖片上傳用）
+    // 取得某位賣家最後一筆商品 ID（給圖片上傳用）
     public int findLastInsertedProductIdByUserId(int userId) {
         int lastId = -1;
         String sql = "SELECT id FROM products WHERE seller_id = ? ORDER BY id DESC LIMIT 1";
@@ -208,5 +208,20 @@ public class ProductDAO {
         }
 
         return products;
+	}
+
+	/**
+	 * 扣除商品庫存
+	 */
+	public void decreaseStock(int productId, int quantity) throws SQLException {
+	    String sql = "UPDATE products SET stock = stock - ? WHERE id = ?";
+	    try (Connection conn = DBUtil.getConnection();
+	         PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+	        stmt.setInt(1, quantity);
+	        stmt.setInt(2, productId);
+	        int rows = stmt.executeUpdate();
+	        System.out.println("扣庫存結果：productId=" + productId + ", 數量=" + quantity + ", 影響行數=" + rows);
+	    }
 	}
 }

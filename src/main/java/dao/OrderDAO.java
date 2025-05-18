@@ -220,7 +220,7 @@ public class OrderDAO {
      */
     public List<OrderItem> findOrderItemsByOrderId(int orderId) {
         List<OrderItem> items = new ArrayList<>();
-        String sql = "SELECT p.name, oi.quantity, oi.price " +
+        String sql = "SELECT oi.product_id, p.name, oi.quantity, oi.price " +
                      "FROM order_items oi " +
                      "JOIN products p ON oi.product_id = p.id " +
                      "WHERE oi.order_id = ?";
@@ -233,6 +233,7 @@ public class OrderDAO {
 
             while (rs.next()) {
                 OrderItem item = new OrderItem();
+                item.setProductId(rs.getInt("product_id"));
                 item.setProductName(rs.getString("name"));
                 item.setQuantity(rs.getInt("quantity"));
                 item.setPrice(rs.getDouble("price"));
@@ -244,4 +245,5 @@ public class OrderDAO {
         }
         return items;
     }
+
 }

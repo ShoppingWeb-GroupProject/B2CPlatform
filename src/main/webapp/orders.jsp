@@ -33,82 +33,107 @@ request.setAttribute("pageTitle", "訂單管理");
 	<c:if test="${not empty orders}">
 		<div class="order-section">
 			<!-- 表頭 -->
-			<div class="grid-container grid-header"
-				style="grid-template-columns: repeat(6, minmax(120px, 1fr));">
-				<div>訂單編號</div>
-
-				<c:choose>
-					<c:when test="${sessionScope.role == 'buyer'}">
+			<c:choose>
+				<c:when test="${sessionScope.role == 'buyer'}">
+					<div class="grid-container grid-header"
+						style="grid-template-columns: repeat(7, minmax(120px, 1fr));">
+						<div>訂單編號</div>
 						<div>總金額</div>
-					</c:when>
-					<c:when test="${sessionScope.role == 'seller'}">
+						<div>送達地址</div>
+						<div>狀態</div>
+						<div>下單時間</div>
+						<div>操作</div>
+						<div>明細</div>
+					</div>
+				</c:when>
+				<c:when test="${sessionScope.role == 'seller'}">
+						<div class="grid-container grid-header"
+						style="grid-template-columns: repeat(8, minmax(120px, 1fr));">
+						<div>訂單編號</div>
 						<div>買家名稱</div>
 						<div>總金額</div>
-					</c:when>
-				</c:choose>
-
-				<div>狀態</div>
-				<div>下單時間</div>
-				<div>操作</div>
-				<div>明細</div>
-			</div>
-
+						<div>送達地址</div>
+						<div>狀態</div>
+						<div>下單時間</div>
+						<div>操作</div>
+						<div>明細</div>
+					</div>
+				</c:when>
+			</c:choose>
 			<!-- 資料列 -->
 			<c:forEach var="order" items="${orders}">
-				<div class="grid-container"
-					style="grid-template-columns: repeat(6, minmax(120px, 1fr));">
-					<div>${order.id}</div>
-
-					<c:choose>
-						<c:when test="${sessionScope.role == 'buyer'}">
-							<div>${order.totalAmount}</div>
-						</c:when>
-						<c:when test="${sessionScope.role == 'seller'}">
-							<div>${order.buyerName}</div>
-							<div>${order.totalAmount}</div>
-						</c:when>
-					</c:choose>
-
-					<div>${order.status}</div>
-					<div>${order.createdAt}</div>
-
-					<!-- 操作按鈕 -->
-					<form action="OrderUpdateController" method="post"
-						style="display: inline;">
-						<div class="btn">
-							<c:choose>
-								<c:when
-									test="${sessionScope.role == 'buyer' && order.status == 'pending'}">
-									<input type="hidden" name="orderId" value="${order.id}">
-									<input type="hidden" name="action" value="cancel">
-									<input type="submit" value="取消訂單">
-								</c:when>
-								<c:when
-									test="${sessionScope.role == 'seller' && order.status == 'pending'}">
-									<input type="hidden" name="orderId" value="${order.id}">
-									<input type="hidden" name="action" value="ship">
-									<input type="submit" value="出貨">
-
-								</c:when>
-								<c:when
-									test="${sessionScope.role == 'buyer' && order.status == 'shipped'}">
-									<input type="hidden" name="orderId" value="${order.id}">
-									<input type="hidden" name="action" value="complete">
-									<input type="submit" value="確認完成">
-								</c:when>
-							</c:choose>
-						</div>
-					</form>
-
-					<!-- 查看明細 -->
-					<div class="btn">
-						<form action="OrderDetailController" method="get"
+			<c:choose>
+				<c:when test="${sessionScope.role == 'buyer'}">
+					<div class="grid-container"
+						style="grid-template-columns: repeat(7, minmax(120px, 1fr));">
+						<div>${order.id}</div>
+						<div>${order.totalAmount}</div>
+						<div>${order.address}</div>
+						<div>${order.status}</div>
+						<div>${order.createdAt}</div>
+						<!-- 操作按鈕 -->
+						<form action="OrderUpdateController" method="post"
 							style="display: inline;">
-							<input type="hidden" name="orderId" value="${order.id}">
-							<input type="submit" value="查看明細">
+							<div class="btn">
+								<c:choose>
+									<c:when test="${order.status == 'pending'}">
+										<input type="hidden" name="orderId" value="${order.id}">
+										<input type="hidden" name="action" value="cancel">
+										<input type="submit" value="取消訂單">
+									</c:when>
+									<c:when test="${order.status == 'shipped'}">
+										<input type="hidden" name="orderId" value="${order.id}">
+										<input type="hidden" name="action" value="complete">
+										<input type="submit" value="確認完成">
+									</c:when>
+								</c:choose>
+							</div>
 						</form>
+	
+						<!-- 查看明細 -->
+						<div class="btn">
+							<form action="OrderDetailController" method="get"
+								style="display: inline;">
+								<input type="hidden" name="orderId" value="${order.id}">
+								<input type="submit" value="查看明細">
+							</form>
+						</div>
 					</div>
-				</div>
+				</c:when>
+				<c:when test="${sessionScope.role == 'seller'}">
+					<div class="grid-container"
+						style="grid-template-columns: repeat(8, minmax(120px, 1fr));">
+						<div>${order.id}</div>
+						<div>${order.buyerName}</div>
+						<div>${order.totalAmount}</div>
+						<div>${order.address}</div>
+						<div>${order.status}</div>
+						<div>${order.createdAt}</div>
+						<!-- 操作按鈕 -->
+						<form action="OrderUpdateController" method="post"
+							style="display: inline;">
+							<div class="btn">
+								<c:choose>
+									<c:when test="${order.status == 'pending'}">
+										<input type="hidden" name="orderId" value="${order.id}">
+										<input type="hidden" name="action" value="ship">
+										<input type="submit" value="出貨">
+									</c:when>
+								</c:choose>
+							</div>
+						</form>
+	
+						<!-- 查看明細 -->
+						<div class="btn">
+							<form action="OrderDetailController" method="get"
+								style="display: inline;">
+								<input type="hidden" name="orderId" value="${order.id}">
+								<input type="submit" value="查看明細">
+							</form>
+						</div>
+					</div>
+				</c:when>
+			</c:choose>
 			</c:forEach>
 		</div>
 	</c:if>
