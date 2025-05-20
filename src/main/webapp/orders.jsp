@@ -112,23 +112,23 @@ request.setAttribute("pageTitle", "訂單管理");
 						<!-- 操作按鈕 -->
 						<form action="OrderUpdateController" method="post"
 							style="display: inline;">
-							<div class="btn">
+							<div>
 								<c:choose>
 									<c:when test="${order.status == 'pending'}">
-										<input type="hidden" name="orderId" value="${order.id}">
-										<input type="hidden" name="action" value="ship">
-										<input type="submit" value="出貨">
+										<input class="btn" type="hidden" name="orderId" value="${order.id}">
+										<input class="btn" type="hidden" name="action" value="ship">
+										<input class="btn" type="submit" value="出貨">
 									</c:when>
 								</c:choose>
 							</div>
 						</form>
 	
 						<!-- 查看明細 -->
-						<div class="btn">
+						<div>
 							<form action="OrderDetailController" method="get"
 								style="display: inline;">
-								<input type="hidden" name="orderId" value="${order.id}">
-								<input type="submit" value="查看明細">
+								<input class="btn" type="hidden" name="orderId" value="${order.id}">
+								<input class="btn" type="submit" value="查看明細">
 							</form>
 						</div>
 					</div>
