@@ -29,7 +29,6 @@ public class ProductController extends HttpServlet {
             throws ServletException, IOException {
 
         HttpSession session = request.getSession(false);
-        String username = (String) session.getAttribute("username");
         @SuppressWarnings("unused")
 		String role = (String) session.getAttribute("role");
         String action = request.getParameter("action");
