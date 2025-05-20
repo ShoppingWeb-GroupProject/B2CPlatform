@@ -73,9 +73,10 @@ public class OrderController extends HttpServlet {
         }
 
         String username = (String) session.getAttribute("username");
+        String address = request.getParameter("address");
 
         // 呼叫服務層建立訂單
-        boolean success = orderService.createOrder(username);
+        boolean success = orderService.createOrder(username, address);
 
         if (success) {
             // 建立成功 → 重新查詢訂單

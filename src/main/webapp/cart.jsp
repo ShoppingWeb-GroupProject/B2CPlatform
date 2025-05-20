@@ -57,7 +57,7 @@ request.setAttribute("pageTitle", "購物車");
 				<!-- 建立訂單 -->
 				<form action="OrderController" method="post">
 					<label for="address">收件地址：</label> <input type="text" id="address"
-						name="address" required />
+						name="address" value="${address}" required />
 					<button class="btn" type="submit">建立訂單</button>
 				</form>
 			</c:otherwise>

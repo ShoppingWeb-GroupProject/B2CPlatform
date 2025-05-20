@@ -10,13 +10,16 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import model.CartItem;
+import model.User;
 import service.CartItemService;
+import service.UserService;
 
 @SuppressWarnings("serial")
 @WebServlet("/CartItemController")
 public class CartItemController extends HttpServlet {
 
     private CartItemService cartItemService = new CartItemService();
+    private UserService userService = new UserService();
 
     // ✅ 顯示購物車內容（GET）
     @Override
@@ -25,6 +28,7 @@ public class CartItemController extends HttpServlet {
 
         HttpSession session = request.getSession(false);
         String username = (session != null) ? (String) session.getAttribute("username") : null;
+        User theUser = userService.getUserByUsername(username);
 
         if (username == null) {
             response.sendRedirect("login.jsp");
@@ -41,7 +45,8 @@ public class CartItemController extends HttpServlet {
 
         request.setAttribute("cartItems", cartItems);
         request.setAttribute("totalAmount", totalAmount);
-
+        request.setAttribute("address", theUser.getAddress());
+        
         request.getRequestDispatcher("cart.jsp").forward(request, response);
     }
 

@@ -25,7 +25,7 @@ public class OrderService {
     /**
      * 建立新訂單（結帳）
      */
-    public boolean createOrder(String username) {
+    public boolean createOrder(String username, String address) {
         try {
             int userId = userDAO.findUserIdByUsername(username);
             if (userId == -1) {
@@ -33,7 +33,9 @@ public class OrderService {
                 return false;
             }
             
-            String address = userDAO.findUserAddressByUsername(username);
+            if (address == null)
+            	address = userDAO.findUserAddressByUsername(username);
+            
             if (address.equals(null)) {
                 System.out.println("未記錄地址");
                 return false;
