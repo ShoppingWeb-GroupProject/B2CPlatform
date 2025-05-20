@@ -36,7 +36,7 @@ public class ProductController extends HttpServlet {
         String productId = request.getParameter("productId");
 
         CategoryDAO categoryDAO = new CategoryDAO();
-        List<model.Category> categories = categoryDAO.findAllCategories();
+        List<model.Category> categories = categoryDAO.findActiveCategories();
 
         if (action == null) {
             response.sendRedirect("index.jsp");
@@ -49,7 +49,7 @@ public class ProductController extends HttpServlet {
             request.setAttribute("action", "show");
 
         } else if ("showForSeller".equals(action)) {
-            List<Product> showProducts = ProductService.getSellerProducts(username);
+            List<Product> showProducts = ProductService.getAllProducts();
             request.setAttribute("showProducts", showProducts);
             request.setAttribute("categories", categories);
             request.setAttribute("action", "showForSeller");

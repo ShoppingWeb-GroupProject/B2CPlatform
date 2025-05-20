@@ -1,5 +1,6 @@
 controller\OrderDetailController.class
 model\CartItem.class
+service\ReviewService.class
 dao\OrderDAO.class
 controller\OrderUpdateController.class
 controller\UserController.class
@@ -10,6 +11,7 @@ service\UserService.class
 controller\RegisterController.class
 dao\DiscountDAO.class
 service\CartItemService.class
+model\Review.class
 controller\LoginController.class
 model\Discount.class
 controller\CategoryController.class
@@ -25,13 +27,18 @@ controller\DiscountController.class
 controller\CheckoutController.class
 model\User.class
 controller\CheckDuplicateServlet.class
+dao\ReplyDAO.class
 util\MailUtil.class
+dao\ReviewDAO.class
 controller\CartItemController.class
 util\createDB.class
+model\Reply.class
+util\LineUtil.class
 service\DiscountService.class
 controller\LineWebhookServlet.class
 dao\CartItemDAO.class
 controller\ProductController.class
+controller\ReviewController.class
 model\Order.class
 model\OrderItem.class
 model\Category.class

@@ -12,7 +12,9 @@ public class ProductDAO {
     // 查詢全部商品
     public List<Product> findAll() {
         List<Product> products = new ArrayList<>();
-        String sql = "SELECT * FROM products";
+        String sql = "SELECT p.* FROM products p " +
+        	    	 "JOIN categories c ON p.category_id = c.id " +
+        	    	 "WHERE c.state = true";
 
         try (Connection conn = DBUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);

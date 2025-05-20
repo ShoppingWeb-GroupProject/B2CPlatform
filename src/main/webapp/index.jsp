@@ -17,7 +17,7 @@ request.setAttribute("pageTitle", "首頁");
 
 <%
 CategoryDAO categoryDAO = new CategoryDAO();
-List<Category> categories = categoryDAO.findAllCategories();
+List<Category> categories = categoryDAO.findActiveCategories();
 request.setAttribute("categories", categories);
 
 Map<Integer, Product> productMap = new HashMap<>();

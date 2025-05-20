@@ -38,6 +38,7 @@ public class CategoryController extends HttpServlet {
             // 新增分類
             String name = request.getParameter("name");
             String description = request.getParameter("description");
+           
             Category category = new Category();
             category.setName(name);
             category.setDescription(description);
@@ -56,10 +57,13 @@ public class CategoryController extends HttpServlet {
             categoryDAO.updateCategory(category);
             request.setAttribute("message", "已完成修改");
 
-        } else if ("delete".equals(action)) {
-            // 刪除分類
+        } else if (action.contains("state")) {
+            // 停用/啟用分類
             int id = Integer.parseInt(request.getParameter("id"));
-            categoryDAO.deleteCategory(id);
+            boolean s;
+            if(action.equals("state-true")) s = true;
+            else s = false;
+            categoryDAO.updateCategory(id, s);
         }
 
         // 完成操作後重導回分類頁，避免重複提交

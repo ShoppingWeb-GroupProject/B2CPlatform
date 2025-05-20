@@ -12,7 +12,7 @@ if (user == null) {
 <%@ include file="/templates/header.jsp"%>
 
 <div class="container mt-5">
-	<h2 class="mb-4">更新個人資料</h2>
+	<h2 class="mb-4">個人資料</h2>
 
 	<div class="grid-container grid-header"
 		style="grid-template-columns: 1fr 3fr;">

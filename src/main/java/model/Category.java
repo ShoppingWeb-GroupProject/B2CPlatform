@@ -9,6 +9,7 @@ public class Category {
     private int id;             // 分類ID（主鍵，自動編號）
     private String name;        // 分類名稱（唯一，不可重複，例如「服飾」）
     private String description; // 分類描述（可選，例如「各式各樣的衣物與配件」）
+    private boolean state;
 
     // Getter & Setter
 
@@ -40,5 +41,15 @@ public class Category {
     /** 設定分類描述 */
     public void setDescription(String description) {
         this.description = description;
+    }
+    
+    /** 取得分類ID */
+    public boolean getstate() {
+        return state;
+    }
+
+    /** 設定分類ID */
+    public void setstate(boolean state) {
+        this.state = state;
     }
 }

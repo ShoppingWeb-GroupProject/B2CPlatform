@@ -12,12 +12,13 @@ import util.DBUtil;
 
 public class CategoryDAO {
 
+	
     /**
      * 查詢所有分類
      */
     public List<Category> findAllCategories() {
         List<Category> categories = new ArrayList<>();
-        String sql = "SELECT id, name, description FROM categories";
+        String sql = "SELECT id, name, description, state FROM categories";
 
         try (Connection conn = DBUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
@@ -28,6 +29,32 @@ public class CategoryDAO {
                 category.setId(rs.getInt("id"));
                 category.setName(rs.getString("name"));
                 category.setDescription(rs.getString("description"));
+                category.setstate(rs.getBoolean("state"));
+                categories.add(category);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return categories;
+    }
+    /**
+     * 查詢啟用分類
+     */
+    public List<Category> findActiveCategories() {
+        List<Category> categories = new ArrayList<>();
+        String sql = "SELECT id, name, description, state FROM categories WHERE state = true";
+
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                Category category = new Category();
+                category.setId(rs.getInt("id"));
+                category.setName(rs.getString("name"));
+                category.setDescription(rs.getString("description"));
+                category.setstate(rs.getBoolean("state"));
                 categories.add(category);
             }
 
@@ -81,15 +108,16 @@ public class CategoryDAO {
     }
 
     /**
-     * 刪除分類
+     * 分類狀態修改
      */
-    public boolean deleteCategory(int id) {
-        String sql = "DELETE FROM categories WHERE id = ?";
+    public boolean updateCategory(int id, boolean state) {
+        String sql = "UPDATE categories SET state = ? WHERE id = ?";
 
         try (Connection conn = DBUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setInt(1, id);
+        	
+        	stmt.setBoolean(1, state);
+            stmt.setInt(2, id);
 
             int rows = stmt.executeUpdate();
             return rows > 0; // 有影響行數，代表刪除成功

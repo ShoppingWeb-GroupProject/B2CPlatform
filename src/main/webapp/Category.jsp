@@ -30,8 +30,7 @@ request.getAttribute("message");
 
 	<c:forEach var="category" items="${categories}">
 		<form action="CategoryController" method="post">
-			<input type="hidden" name="action" value="update" /> <input
-				type="hidden" name="id" value="${category.id}" />
+			<input type="hidden" name="id" value="${category.id}" />
 			<div class="category-grid">
 				<div>${category.id}</div>
 				<div>
@@ -44,8 +43,14 @@ request.getAttribute("message");
 
 					<button class="btn" type="submit" name="action" value="update"
 						onclick="return confirm('確定要修改這個分類嗎？');">修改</button>
-					<button class="btn" type="submit" name="action" value="delete"
-						onclick="return confirm('確定要刪除這個分類嗎？');">刪除</button>
+						<c:if test="${category.state == false}" >
+							<button class="btn" type="submit" name="action" value="state-true"
+								onclick="return confirm('確定要啟用這個分類嗎？');">啟用</button>
+						</c:if>
+						<c:if test="${category.state == true}" >
+							<button class="btn" type="submit" name="action" value="state-false"
+								onclick="return confirm('確定要停用這個分類嗎？');">停用</button>
+						</c:if>
 				</div>
 			</div>
 		</form>

@@ -37,10 +37,10 @@ public class CategoryService {
         return categoryDAO.updateCategory(category);
     }
 
-    /**
-     * 刪除分類
-     */
-    public boolean deleteCategory(int id) {
-        return categoryDAO.deleteCategory(id);
-    }
+//    /**
+//     * 刪除分類
+//     */
+//    public boolean deleteCategory(int id) {
+//        return categoryDAO.deleteCategory(id);
+//    }
 }
