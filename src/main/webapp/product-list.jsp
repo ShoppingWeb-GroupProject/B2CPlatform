@@ -143,8 +143,8 @@ request.setAttribute("pageTitle", "首頁");
                 <img src="${product.imageUrl}" alt="商品圖片" style="max-height: 100px;" />
             </c:if>
 
-            <div class="btn form-actions">
-                <input type="submit" value="${product.id != null ? '更新商品' : '新增商品'}" />
+            <div>
+                <input class="btn form-actions" type="submit" value="${product.id != null ? '更新商品' : '新增商品'}" />
             </div>
         </div>
     </form>

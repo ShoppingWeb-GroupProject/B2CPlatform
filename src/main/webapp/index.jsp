@@ -63,7 +63,6 @@ request.setAttribute("productMap", productMap);
 								</c:otherwise>
 							</c:choose>
 
-
 						</c:when>
 						<c:otherwise>
 							<c:out value="${product.name}" default="無商品" />
@@ -77,8 +76,7 @@ request.setAttribute("productMap", productMap);
 	</div>
 	<c:if
 		test="${empty sessionScope.username || sessionScope.role=='buyer'}">
-		<a
-			href="https://line.me/R/ti/p/@375uqvrnhttps://line.me/R/ti/p/@375uqvrn">加入官方帳號，追蹤您的包裹</a>
+		<a href="https://line.me/R/ti/p/@375uqvrnhttps://line.me/R/ti/p/@375uqvrn">加入官方帳號，追蹤您的包裹</a>
 	</c:if>
 </div>
 
