@@ -44,7 +44,7 @@ public class LoginController extends HttpServlet {
             session.setAttribute("user", user); 
 
             // 導向首頁
-            response.sendRedirect("index.jsp");
+            response.sendRedirect("home");
         } else {
             // 登入失敗：回傳錯誤訊息並留在登入頁
             request.setAttribute("error", "帳號或密碼錯誤");

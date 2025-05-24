@@ -11,6 +11,15 @@ import model.User;
 import util.DBUtil;
 
 public class UserDAO {
+	
+	public void updateDiscountByUsername(String username, double discount) throws SQLException {
+	    String sql = "UPDATE users SET discount = ? WHERE username = ?";
+	    try (Connection conn = DBUtil.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+	        stmt.setDouble(1, discount);
+	        stmt.setString(2, username);
+	        stmt.executeUpdate();
+	    }
+	}
 
     /**
      * 新增使用者
@@ -37,7 +46,7 @@ public class UserDAO {
             return false;
         }
     }
-
+    
     /**
      * 查詢使用者（依帳號與密碼）
      */

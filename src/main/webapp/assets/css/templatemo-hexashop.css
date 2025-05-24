@@ -921,6 +921,25 @@ Men
   border :1px solid #2a2a2a;
 }
 
+.category-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+.category-tab {
+    padding: 8px 16px;
+    border-radius: 8px 8px 0 0;
+    background-color: #e0e0e0;
+    border: 1px solid #ccc;
+    border-bottom: none;
+    cursor: pointer;
+}
+.category-tab.active {
+    background-color: white;
+    font-weight: bold;
+}
 
 /*
 ---------------------------------------------

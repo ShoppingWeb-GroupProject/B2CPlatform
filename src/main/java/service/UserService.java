@@ -1,5 +1,6 @@
 package service;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import dao.UserDAO;
@@ -12,11 +13,10 @@ import model.User;
 public class UserService {
 
     private UserDAO userDAO = new UserDAO();
-
+    
     public boolean updateLineId(int userId, String lineId) {
         return userDAO.updateLineId(userId, lineId);
     }
-
 
     /**
      * 使用者登入驗證
@@ -110,4 +110,14 @@ public class UserService {
     public boolean phoneExists(String phone) {
         return userDAO.phoneExists(phone);
     }
+
+    public void updateUserDiscount(String username, double discount) {
+        try {
+            userDAO.updateDiscountByUsername(username, discount);
+        } catch (SQLException e) {
+            e.printStackTrace(); // 或丟出自定例外
+            throw new RuntimeException("更新會員折扣失敗", e);
+        }
+    }
+
 }

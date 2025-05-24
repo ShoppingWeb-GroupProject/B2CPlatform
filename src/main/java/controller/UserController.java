@@ -53,7 +53,19 @@ public class UserController extends HttpServlet {
 			userService.deleteUser(userId);
 			response.sendRedirect("UserController?action=list");
 
-		} else {
+		} else if ("showDiscountForm".equals(action)) {
+		    String username = request.getParameter("username");
+		    User user = userService.getUserByUsername(username);
+		    request.setAttribute("user", user);
+		    request.getRequestDispatcher("/discountForm.jsp").forward(request, response);
+		    
+		}else if ("updateLevel".equals(action)) {
+		    String username = request.getParameter("username");
+		    double discount = Double.parseDouble(request.getParameter("discount"));
+		    userService.updateUserDiscount(username, discount);
+		    response.sendRedirect("UserController?action=showDiscountForm&username="+username);
+
+		}else {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Unknown action: " + action);
 		}
 	}
@@ -98,7 +110,7 @@ public class UserController extends HttpServlet {
 			if (user != null) {
 				HttpSession session = request.getSession();
 				session.setAttribute("user", user);
-				response.sendRedirect("index.jsp");
+				response.sendRedirect("HomeController");
 			} else {
 				request.setAttribute("error", "登入失敗，請檢查帳號密碼。");
 				request.getRequestDispatcher("login.jsp").forward(request, response);

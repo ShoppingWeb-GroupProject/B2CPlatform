@@ -46,6 +46,8 @@ public class ProductController extends HttpServlet {
             List<Product> showProducts = ProductService.getAllProducts();
             request.setAttribute("showProducts", showProducts);
             request.setAttribute("action", "show");
+            request.setAttribute("categories", categoryDAO.findActiveCategories());
+
 
         } else if ("showForSeller".equals(action)) {
             List<Product> showProducts = ProductService.getAllProducts();

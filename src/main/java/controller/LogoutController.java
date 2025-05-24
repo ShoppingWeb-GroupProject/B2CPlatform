@@ -31,6 +31,6 @@ public class LogoutController extends HttpServlet {
         }
 
         // 導回首頁
-        response.sendRedirect("index.jsp");
+        response.sendRedirect("home");
     }
 }

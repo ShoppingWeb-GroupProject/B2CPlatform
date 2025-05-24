@@ -61,12 +61,9 @@
 					</c:choose>
 				</div>
 
-				<!-- 角色更新 -->
-				
-
 				<!-- 折扣管理 -->
 				<div>
-					<a class="btn" href="DiscountController?username=${user.username}">折扣</a>
+					<a class="btn" href="UserController?action=showDiscountForm&username=${user.username}">會員等級</a>
 				</div>
 
 				<!-- 刪除 -->

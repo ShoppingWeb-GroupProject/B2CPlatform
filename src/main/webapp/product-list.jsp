@@ -47,9 +47,19 @@ request.setAttribute("pageTitle", "首頁");
 				</div>
 			</div>
 		</div>
+		<!-- templatemo-hexashop.css line:924-->
+		<div class="category-tabs">
+	        <div class="category-tab active" onclick="filterCategory('all', this)">全部</div>
+	        <c:forEach var="cat" items="${categories}">
+	            <div class="category-tab" onclick="filterCategory('${cat.id}', this)">
+	                ${cat.name}
+	            </div>
+	        </c:forEach>
+	    </div>
+		
 		<div class="grid-container grid-row" style="grid-template-columns: repeat(3, 1fr)" >
 			<c:forEach var="product" items="${showProducts}">
-				<div class="item">
+				<div class="item" data-category="${product.categoryId}">
 					<div class="thumb">
 						<a href="ProductController?action=detail&productId=${product.id}">
 							<img src="${product.imageUrl}" alt="${product.name}">
@@ -161,8 +171,19 @@ request.setAttribute("pageTitle", "首頁");
       el.textContent = txt.length > limit ? txt.slice(0, limit) + "..." : txt;
     });
   }
-
   truncateText(".ellipsis", 30);
+  
+  function filterCategory(categoryId, tab) {
+      // 切換 tab 樣式
+      document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+
+      // 顯示或隱藏商品
+      document.querySelectorAll('.item').forEach(item => {
+          const cat = item.getAttribute('data-category');
+          item.style.display = (categoryId === 'all' || cat === categoryId) ? 'block' : 'none';
+      });
+  }
 </script>
 
 <%@ include file="/templates/footer.jsp"%>

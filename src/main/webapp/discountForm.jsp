@@ -1,46 +1,31 @@
 <%@ page contentType="text/html; charset=UTF-8" session="true"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%
-request.setAttribute("pageTitle", "設定會員折扣");
+request.setAttribute("pageTitle", "設定會員等級");
 %>
 <%@ include file="/templates/header.jsp"%>
-<div class="container mt-5">
-	<h2 style="margin-bottom: 10px;">會員折扣設定</h2>
 
-	<!-- 顯示錯誤或成功訊息 -->
-	<c:if test="${not empty message}">
-		<p class="message">${message}</p>
-	</c:if>
-	<c:if test="${not empty error}">
-		<p class="error">${error}</p>
-	</c:if>
+<div class="discount-container">
+    <h2>會員折扣設定</h2>
 
-	<form class="form-grid" action="DiscountController" method="post">
-		<label>會員帳號：</label> <input type="text" name="username"
-			value="${username}" required>
+    <form action="UserController" method="post">
+        <input type="hidden" name="action" value="updateLevel" />
+        <input type="hidden" name="username" value="${user.username}" />
 
-		<c:if test="${not empty discount}">
-			<div class="form-actions">
-				<p>目前折扣名稱：${discount.name}</p>
-				<p>目前折扣描述：${discount.description}</p>
-				<p>目前折扣值：${discount.discountValue}</p>
-				<p>
-					啟用狀態：
-					<c:choose>
-						<c:when test="${discount.active}">啟用中</c:when>
-						<c:otherwise>未啟用</c:otherwise>
-					</c:choose>
-				</p>
-			</div>
-		</c:if>
-<label>設定新折扣值（例：0.9 表示九折）：</label>
-<input type="text" name="discount" required>
+        <p><strong>會員：</strong> ${user.username}</p>
+        <p><strong>Email：</strong> ${user.email}</p>
 
-<button class="btn form-actions" type="submit">更新折扣</button>
-</form>
+        <label for="discount">會員等級：</label>
+        <select name="discount" id="discount">
+            <option value="1.00" ${user.discount == 1.00 ? "selected" : ""}>普通會員 (0%)</option>
+            <option value="0.90" ${user.discount == 0.90 ? "selected" : ""}>白銀會員 (10%)</option>
+            <option value="0.80" ${user.discount == 0.80 ? "selected" : ""}>黃金會員 (20%)</option>
+        </select>
 
-<div>
-	<a href="UserController?action=list">回會員管理列表</a>
+        <input type="submit" value="更新等級" />
+    </form>
+
+    <a href="UserController?action=list" class="back-link">← 回會員管理列表</a>
 </div>
-</div>
+
 <%@ include file="/templates/footer.jsp"%>

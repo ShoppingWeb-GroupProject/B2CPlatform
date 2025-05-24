@@ -19,11 +19,11 @@
 
 
 <!-- Additional CSS Files -->
-<link rel="stylesheet" type="text/css"
-	href="assets/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="assets/css/discount.css">
 
-<link rel="stylesheet" type="text/css"
-	href="assets/css/font-awesome.css">
+<link rel="stylesheet" type="text/css" href="assets/css/bootstrap.min.css">
+
+<link rel="stylesheet" type="text/css" href="assets/css/font-awesome.css">
 
 <link rel="stylesheet" href="assets/css/templatemo-hexashop.css">
 
@@ -31,14 +31,11 @@
 
 <link rel="stylesheet" href="assets/css/lightbox.css">
 
-<link rel="stylesheet"
-	href="<c:url value='/assets/css/main-style.css' />">
+<link rel="stylesheet" href="<c:url value='/assets/css/main-style.css' />">
 
-<link rel="stylesheet"
-	href="<c:url value='/assets/css/cart-item.css' />">
+<link rel="stylesheet" href="<c:url value='/assets/css/cart-item.css' />">
 
-<link rel="stylesheet"
-	href="<c:url value='/assets/css/product-list.css' />">
+<link rel="stylesheet" href="<c:url value='/assets/css/product-list.css' />">
 
 <link rel="stylesheet" href="<c:url value='/assets/css/category.css' />">
 
@@ -59,7 +56,7 @@ https://templatemo.com/tm-571-hexashop
 				<div class="col-12">
 					<nav class="main-nav">
 						<!-- ***** Logo Start ***** -->
-						<a href="index.jsp" class="logo"> <img
+						<a href="home" class="logo"> <img
 							src="assets/images/KIXADO-gray.png" width="150">
 						</a>
 						<!-- ***** Logo End ***** -->
@@ -73,7 +70,7 @@ https://templatemo.com/tm-571-hexashop
 						</c:url>
 
 						<ul class="nav">
-							<li class="scroll-to-section"><a href="index.jsp"
+							<li class="scroll-to-section"><a href="home"
 								class="active">首頁</a></li>
 							<c:if test="${empty sessionScope.username}">
 								<li class="scroll-to-section"><a href="register.jsp">註冊</a></li>
