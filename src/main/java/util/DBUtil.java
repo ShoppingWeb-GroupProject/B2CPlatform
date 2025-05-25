@@ -6,20 +6,14 @@ import java.sql.SQLException;
 
 public class DBUtil {
 
-    // ✅ JawsDB MariaDB connection parameters
-    private static final String URL = "jdbc:mysql://m1nnhxhj4achm4my:z0gciz6n0chhq8fs@c9cujduvu830eexs.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/ism1tkefynz1jgyp";
-    private static final String USER = "m1nnhxhj4achm4my";
-    private static final String PASSWORD = "z0gciz6n0chhq8fs";
-    
     //本地資料
-//    private static final String URL = "jdbc:mariadb://localhost:3306/b2cshop?useSSL=false&serverTimezone=Asia/Taipei&characterEncoding=utf8";
-//    private static final String USER = "root";
-//    private static final String PASSWORD = "";
+    private static final String URL = "jdbc:mysql://localhost:3306/b2cshop?useSSL=false&serverTimezone=Asia/Taipei&characterEncoding=utf8";
+    private static final String USER = "root";
+    private static final String PASSWORD = "cody7658";
 
     public static Connection getConnection() {
         Connection conn = null;
         try {
-//        	Class.forName("org.mariadb.jdbc.Driver");
         	Class.forName("com.mysql.cj.jdbc.Driver");
             conn = DriverManager.getConnection(URL, USER, PASSWORD);
             System.out.println("✅ 連線成功！");

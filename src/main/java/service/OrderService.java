@@ -25,47 +25,65 @@ public class OrderService {
     /**
      * 建立新訂單（結帳）
      */
-    public boolean createOrder(String username, String address) {
+    public boolean createOrder(String username, String address, double frontendAmount) {
         try {
+            // 🧑‍💻 查使用者 ID
             int userId = userDAO.findUserIdByUsername(username);
             if (userId == -1) {
-                System.out.println("找不到使用者：" + username);
-                return false;
-            }
-            
-            if (address == null)
-            	address = userDAO.findUserAddressByUsername(username);
-            
-            if (address.equals(null)) {
-                System.out.println("未記錄地址");
-                return false;
-            }
-            // 查詢購物車商品
-            List<OrderItem> cartItems = orderDAO.getCartItems(userId);
-            if (cartItems.isEmpty()) {
-                System.out.println("購物車為空，無法結帳");
+                System.out.println("❌ 找不到使用者：" + username);
                 return false;
             }
 
-            // 計算總金額
-            double totalAmount = cartItems.stream()
+            // 📦 查購物車商品
+            List<OrderItem> cartItems = orderDAO.getCartItems(userId);
+            if (cartItems.isEmpty()) {
+                System.out.println("❌ 購物車為空，無法結帳");
+                return false;
+            }
+
+            // 🧾 後端重新計算總金額
+            double backendAmount = cartItems.stream()
                     .mapToDouble(item -> item.getPrice() * item.getQuantity())
                     .sum();
 
-            // 建立訂單物件
+            // 💥 前端金額驗證
+            if (Math.abs(backendAmount - frontendAmount) > 0.01) {
+                System.out.printf("❌ 前端金額 (%.2f) 與後端計算金額 (%.2f) 不一致！%n", frontendAmount, backendAmount);
+                return false;
+            }
+
+         // 📮 處理收件地址
+            if (address == null) {
+                address = userDAO.findUserAddressByUsername(username);
+            }
+
+            if (address == null) {
+                System.out.println("❌ 找不到任何收件地址");
+                return false;
+            }
+
+            address = address.trim();
+
+            if (address.isEmpty()) {
+                System.out.println("❌ 收件地址為空白字串");
+                return false;
+            }
+
+            // ✅ 建立訂單物件
             Order order = new Order();
             order.setUserId(userId);
-            order.setTotalAmount(totalAmount);
-			order.setAddress(address );
+            order.setTotalAmount(backendAmount);
+            order.setAddress(address);
             order.setStatus("pending");
 
+            // 📝 寫入資料庫
             boolean success = orderDAO.createOrder(order, cartItems);
 
-            // ✅ 訂單成立推播
+            // ✅ 如果成功就推播通知
             if (success) {
                 User user = userDAO.findByUsername(username);
                 if (user != null && user.getLineId() != null && !user.getLineId().isEmpty()) {
-                    String message = "\u2705 您的訂單已成立，總金額 $" + totalAmount + "，我們將盡快處理！";
+                    String message = "\u2705 您的訂單已成立，總金額 $" + backendAmount + "，我們將盡快處理！";
                     LineUtil.sendPushMessage(user.getLineId(), message);
                 }
             }
@@ -77,6 +95,7 @@ public class OrderService {
             return false;
         }
     }
+
 
     /**
      * 更新訂單狀態並推播

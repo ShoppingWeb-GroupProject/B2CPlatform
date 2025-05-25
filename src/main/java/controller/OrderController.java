@@ -59,32 +59,48 @@ public class OrderController extends HttpServlet {
     }
 
     /**
-     * POST：建立新訂單
+     * POST：建立新訂單（僅允許從 PaymentController forward 而來）
      */
     @Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        // 驗證登入
+        // ✅ 驗證登入
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("username") == null) {
             response.sendRedirect("login.jsp");
             return;
         }
 
-        String username = (String) session.getAttribute("username");
-        String address = request.getParameter("address");
+        // ⛔ 檢查是否來自付款流程
+        Object fromPayment = request.getAttribute("fromPayment");
+        if (!Boolean.TRUE.equals(fromPayment)) {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, "不允許直接建立訂單，請先完成付款。");
+            return;
+        }
 
-        // 呼叫服務層建立訂單
-        boolean success = orderService.createOrder(username, address);
+        // ✅ 付款通過，準備建立訂單
+        String username = (String) session.getAttribute("username");
+        String address = (String) request.getAttribute("address");
+        String amountStr = (String) request.getAttribute("amount"); // 🟢 加上這行
+        double frontendAmount = 0;
+
+        try {
+            frontendAmount = Double.parseDouble(amountStr);
+        } catch (NumberFormatException e) {
+            System.out.println("❌ 金額格式錯誤: " + amountStr);
+            response.sendRedirect("cart.jsp");
+            return;
+        }
+
+        boolean success = orderService.createOrder(username, address, frontendAmount);
 
         if (success) {
-            // 建立成功 → 重新查詢訂單
             response.sendRedirect("OrderController");
         } else {
-            // 建立失敗 → 顯示錯誤訊息並回到購物車頁
             request.setAttribute("error", "訂單建立失敗！");
             request.getRequestDispatcher("cart.jsp").forward(request, response);
         }
     }
+
 }

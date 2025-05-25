@@ -29,6 +29,11 @@ public class CartItemController extends HttpServlet {
         HttpSession session = request.getSession(false);
         String username = (session != null) ? (String) session.getAttribute("username") : null;
         User theUser = userService.getUserByUsername(username);
+        
+        String error = request.getParameter("error");
+        if (error != null && !error.isEmpty()) {
+            request.setAttribute("paymentError", error);
+        }
 
         if (username == null) {
             response.sendRedirect("login.jsp");
@@ -38,13 +43,17 @@ public class CartItemController extends HttpServlet {
         List<CartItem> cartItems = cartItemService.getCartItemsByUsername(username);
 
         // 計算總金額
-        double totalAmount = 0;
+        double total = 0;
         for (CartItem item : cartItems) {
-            totalAmount += item.getPrice() * item.getQuantity();
+        	total += item.getPrice() * item.getQuantity();
         }
+        
+        // 折扣後金額
+        double discount = theUser.getDiscount(); // 假設 1.0 為原價、0.9 為九折
+        double discountedTotal = total * discount;
 
         request.setAttribute("cartItems", cartItems);
-        request.setAttribute("totalAmount", totalAmount);
+        request.setAttribute("discountedTotal", (int)discountedTotal);
         request.setAttribute("address", theUser.getAddress());
         
         request.getRequestDispatcher("cart.jsp").forward(request, response);

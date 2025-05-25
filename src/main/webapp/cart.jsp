@@ -7,6 +7,12 @@ request.setAttribute("pageTitle", "購物車");
 %>
 <%@ include file="/templates/header.jsp"%>
 
+<c:if test="${not empty paymentError}">
+    <script>
+        alert("${paymentError}");
+    </script>
+</c:if>
+
 <div class="container mt-5">
 	<c:if test="${empty sessionScope.username}">
 		<c:redirect url="login.jsp" />
@@ -14,11 +20,11 @@ request.setAttribute("pageTitle", "購物車");
 
 	<div class="cart-wrapper">
 		<h2>🛒 購物車頁面</h2>
-		<p>歡迎，${sessionScope.username}，這是您的購物車。</p>
+		<p class="total">歡迎，${sessionScope.username}，這是您的購物車。</p>
 
 		<c:choose>
 			<c:when test="${empty cartItems}">
-				<p>目前購物車是空的。</p>
+				<p class="total">目前購物車是空的。</p>
 			</c:when>
 			<c:otherwise>
 				<!-- 表頭 -->
@@ -49,21 +55,32 @@ request.setAttribute("pageTitle", "購物車");
 						</div>
 					</div>
 				</c:forEach>
-
-				<p class="total">
-					<strong>總金額：</strong> $${total}
+				<p class="total">會員等級：
+				    <c:choose>
+				        <c:when test="${user.discount == 1.0}">普通會員（無折扣）</c:when>
+				        <c:when test="${user.discount == 0.9}">銀級會員（9 折）</c:when>
+				        <c:when test="${user.discount == 0.8}">金級會員（8 折）</c:when>
+				        <c:otherwise>其他（${user.discount}）</c:otherwise>
+				    </c:choose>
 				</p>
+				
+				<p class="total">
+					    <strong>原始總金額：</strong> $${total} <br>
+   						<strong>折扣後總金額：</strong> $${discountedTotal}				
+				</p>
+				
+				<!-- 建立訂單 -->			
+				<form action="PaymentController" method="get">
 
-				<!-- 建立訂單 -->
-				<form action="OrderController" method="post">
-
-					<label for="address">收件地址：</label> <input type="text" id="address"
+					<label class="total" for="address">收件地址：</label> <input type="text" id="address"
 						name="address" value="${address}" required />
-					<button class="btn" type="submit">建立訂單</button>
+					<input type="hidden" name="amount" value="${discountedTotal}" />
+					<button class="btn" type="submit">前往付款</button>
 				</form>
 			</c:otherwise>
 		</c:choose>
 	</div>
 
 </div>
+
 <%@ include file="/templates/footer.jsp"%>

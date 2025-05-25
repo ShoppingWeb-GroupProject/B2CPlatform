@@ -42,7 +42,7 @@ request.setAttribute("pageTitle", "訂單管理");
 						<div>送達地址</div>
 						<div>狀態</div>
 						<div>下單時間</div>
-						<div></div>
+						<div>更改狀態</div>
 						<div>明細</div>
 					</div>
 				</c:when>
@@ -55,7 +55,7 @@ request.setAttribute("pageTitle", "訂單管理");
 						<div>送達地址</div>
 						<div>狀態</div>
 						<div>下單時間</div>
-						<div></div>
+						<div>更改狀態</div>
 						<div>明細</div>
 					</div>
 				</c:when>
@@ -69,7 +69,13 @@ request.setAttribute("pageTitle", "訂單管理");
 						<div>${order.id}</div>
 						<div>${order.totalAmount}</div>
 						<div>${order.address}</div>
-						<div>${order.status}</div>
+						<c:choose>
+						    <c:when test="${order.status == 'pending'}">待處理</c:when>
+						    <c:when test="${order.status == 'completed'}">已完成</c:when>
+						    <c:when test="${order.status == 'shipped'}">已出貨</c:when>
+						    <c:when test="${order.status == 'cancelled'}">已取消</c:when>
+						    <c:otherwise>⚠ 未知狀態</c:otherwise>
+						</c:choose>
 						<div>${order.createdAt}</div>
 						<!-- 操作按鈕 -->
 						<form action="OrderUpdateController" method="post"
@@ -107,7 +113,13 @@ request.setAttribute("pageTitle", "訂單管理");
 						<div>${order.buyerName}</div>
 						<div>${order.totalAmount}</div>
 						<div>${order.address}</div>
-						<div>${order.status}</div>
+						<c:choose>
+						    <c:when test="${order.status == 'pending'}">待處理</c:when>
+						    <c:when test="${order.status == 'completed'}">已完成</c:when>
+						    <c:when test="${order.status == 'shipped'}">已出貨</c:when>
+						    <c:when test="${order.status == 'cancelled'}">已取消</c:when>
+						    <c:otherwise>⚠ 未知狀態</c:otherwise>
+						</c:choose>
 						<div>${order.createdAt}</div>
 						<!-- 操作按鈕 -->
 						<form action="OrderUpdateController" method="post"
@@ -137,6 +149,5 @@ request.setAttribute("pageTitle", "訂單管理");
 			</c:forEach>
 		</div>
 	</c:if>
-
 </div>
 <%@ include file="/templates/footer.jsp"%>
